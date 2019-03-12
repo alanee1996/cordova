@@ -9,8 +9,18 @@ var app = {
   },
 
   onDeviceReady: function () {
-    DBEntity.test()
-    DBEntity.checkTables();
+    var db = DBEntity
+    db.test()
+    db.checkTables()
+    // obj = {};
+    // obj.type = 'type'
+    // obj.demensions = 12.5
+    // obj.date = 'date'
+    // obj.time= 'time'
+    // obj.price = 12.4
+    // obj.note = 'note'
+    // obj.reporter = 'asdasd'
+    // db.createStorage(obj)
   }
 }
 
