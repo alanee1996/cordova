@@ -1,22 +1,40 @@
-<script type="text/javascript" src="js/home.js"></script>
 <div id="drawer"></div>
 <div class="page">
     <div id="nav"></div>
-    <div
-        class="content has-header">
+    <div class="content has-header">
         <!--Content of page-->
-        <div class="padding border-grey-400 shadow radius">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                        tempor incididunt ut labore et dolore magna aliqua.
-            </p>
+        <div class="spance"></div>
+        <div class="padding">
+            <div class="list">
+                <div class="item icon ion-search">
+                    <input placeholder="Search" id="search" type="text" />
+                </div>
+            </div>
         </div>
-        <div class="space"></div>
-        <div class="padding border-purple shadow radius mark">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                        tempor incididunt ut labore et dolore magna aliqua.
-            </p>
+        <div class="spance"></div>
+        <div class="spance"></div>
+        <div class="list padding" id="storagelist">
+            <div id="no-result" class="item hide">
+                <h1>No result found</h1>
+            </div>
+            <div class="list shadow radius white hide st-item" id="storage-item">
+                <div class="item">
+                    <div class="item full">
+                        <img src="https://mobileui.github.io/img/maringa.jpg" width="400" height="100"  />
+                    </div>
+                    <h2 class="storage-type">Storage type: abc</h2>
+                    <p class="demensions">Demensions: 152cm x 152cm</p>
+                    <p class="reporter"></p>
+                    <p class="note hide"></p>
+                    <h2 class="price">Price $200</h2>
+                    <div class="space"></div>
+                    <span id="feature-container" class="text-small green radius padding hide"></span>
+                    <div class="storage-features"></div>
+                    <p class="text-grey-500 watermark-date datetime">
+                            Created at 01-01-2019 12:56:00 am
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

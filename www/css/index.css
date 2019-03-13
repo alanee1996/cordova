@@ -1,4 +1,16 @@
-#drawar_avatar_img{
+#drawar_avatar_img {
     width: 100px !important;
     height: 100px !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.watermark-date {
+    font-size: 10px !important;
+}
+
+.st-item {
+    margin-bottom: 26px !important;
 }
