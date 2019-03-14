@@ -13,23 +13,36 @@ var homeFunction = {
     homeFunction.getStorageData()
   },
   getStorageData: function () {
-    db.test2(homeFunction.buildStorageList)
+    db.getStorageList(homeFunction.buildStorageList)
   },
   // this function is to select the data from database and inject to list view
   buildStorageList: function (model) {
+    console.log(model)
     if (model != null && model.length > 0) {
       $('#no-result').addClass('hide')
       $.each(model, function (key, value) {
         var storageItem = $('#storage-item').clone()
-        var storageFeature = storageItem.find('#feature-container').removeClass('hide')
         storageItem.attr('id', 'storage-item_' + value.id).removeClass('hide')
         // bind image later
+        if (value !== null && value.images.length > 0) {
+          storageItem.find('img').attr('src',value.images[0].path)
+        }
         storageItem.find('.storage-type').text('Storage type: ' + value.type)
         storageItem.find('.demensions').text('Demensions: ' + value.demensions)
         storageItem.find('.price').text('Price ' + value.price)
         storageItem.find('.reporter').text('Reporter: ' + value.reporter)
         storageItem.find('.note').text('Note: ' + value.note)
-        storageItem.find('.storage-features').append(storageFeature.text('test'))
+        if (value.features !== null && value.features.length > 0) {
+          var featuresElement = []
+          $.each(value.features, function (key, v) { 
+            var feature = $('#feature-container').clone()
+            feature.removeClass('hide')
+            feature.removeAttr('id')
+            feature.text(v.feature)
+            featuresElement.push(feature)
+          })
+          storageItem.find('.storage-features').append(featuresElement)
+        }
         storageItem.find('.datetime').text('Created at ' + value.date + ' ' + value.time)
         $('#storagelist').append(storageItem)
       })
