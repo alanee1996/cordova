@@ -7,6 +7,8 @@ var camera = {
       // In this app, dynamically set the picture source, Camera or photo gallery
       sourceType: Camera.PictureSourceType.CAMERA,
       encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 200,
+      targetHeight: 200,
       mediaType: Camera.MediaType.PICTURE,
       allowEdit: false,
       correctOrientation: true // Corrects Android orientation quirks
@@ -20,17 +22,16 @@ var camera = {
     console.log('CAMERA ERROR: ' + error)
   },
   savePhoto: function (imagePath, callback) {
-    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + 'myStorage', (dirEntry) => {
+    console.log(imagePath)
+    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, (dirEntry) => {
       var stamp = new Date().getTime()
       var filename = stamp + '.jpg'
       var directory = 'myStorage'
-      console.log(dirEntry)
-        // window.requestFileSystem(LocalFileSystem, 0, function (entry) {
-        //     console.log(entry)
-        // rootEntry.root.getDirectory(directory, { create: true, exclusive: false }, function (dir) {
-        //   resolveImagePath.moveTo(dir, filename, callback, camera.fileSavingError)
-        // }, camera.fileSavingError)
-    //   }, camera.fileSavingError)
+      window.resolveLocalFileSystemURL(imagePath, (imageEntry) => {
+        dirEntry.getDirectory(directory, { create: true, exclusive: false }, function (dir) {
+            imageEntry.moveTo(dir, filename, callback, camera.fileSavingError)
+        }, camera.fileSavingError)
+      }, camera.fileSavingError)
     }, camera.fileSavingError)
   },
   fileSavingError: function (error) {

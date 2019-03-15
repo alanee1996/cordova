@@ -5,8 +5,7 @@ var createFunction = {
       camera.openCamera((imagePath) => {
         $('#timage').attr('src', imagePath).removeClass('hide')
         camera.savePhoto(imagePath, (retrivedImage) => { 
-          console.log(retrivedImage)
-          console.log(retrivedImage.fullPath)
+          $('#imagepath').text(retrivedImage.nativeURL)
         })
       })
     })
@@ -45,7 +44,7 @@ var createFunction = {
       obj.note = e.target.note.value
       obj.reporter = e.target.reporter.value
       obj.features = createFunction.getFeatures($(e.target).find('input[name="storageFeature[]"]'))
-      obj.images = ['https://mobileui.github.io/img/maringa.jpg']
+      obj.images = createFunction.getImagePath()
       db.createStorage(obj)
       loading('Creating storage')
       setTimeout(() => {
@@ -94,5 +93,11 @@ var createFunction = {
     }else {
       e.target.setCustomValidity('')
     }
+  },
+  getImagePath: function () { 
+    if ($('#imagepath').text()) {
+      return [$('#imagepath').text()]
+    }
+    return []
   }
 }

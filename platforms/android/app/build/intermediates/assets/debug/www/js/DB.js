@@ -198,5 +198,19 @@ var DBEntity = {
       '-------------------------------------------------------------------------'
     )
     return error
+  },
+  flash: function () {
+    if (DBEntity == null) {
+      DBEntity.connect()
+      }
+      DBEntity.db.transaction(function(tx){
+        tx.executeSql('drop table `storage_image` ',[],(t,rs)=>console.log('storage image drop'),DBEntity.printDbError)
+      });
+      DBEntity.db.transaction(function(tx){
+        tx.executeSql('drop table `storage_feature` ',[],(t,rs)=>console.log('storage feature drop'),DBEntity.printDbError)
+      });
+      DBEntity.db.transaction(function(tx){
+        tx.executeSql('drop table `storage` ',[],(t,rs)=>console.log('storage drop'),DBEntity.printDbError)
+    });
   }
 }
