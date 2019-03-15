@@ -21,6 +21,9 @@
     },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "my.edu.sei.myapp"
+    },
+    "cordova-plugin-datepicker": {
+      "PACKAGE_NAME": "my.edu.sei.myapp"
     }
   },
   "dependent_plugins": {

@@ -1,10 +1,35 @@
 var createFunction = {
   init: function (obj) {
+    $('#time_container').click(function () {
+      $('#time').blur()
+      var options = {
+        date: new Date(),
+        mode: 'time',
+        is24Hour: true,
+      }
+      datePicker.show(options, (d) => {
+        // $('#time').blur()
+        $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
+      }, (e) => alert(e))
+    })
+    $('#date_container').click(function () {
+      // $('#date').blur()
+      var options = {
+        date: new Date(),
+        mode: 'date',
+        minDate: new Date()
+      }
+      datePicker.show(options, (d) => {
+        // $('#date').blur()
+        $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
+      }, (e) => alert(e))
+    })
+
     $('#openCam').click(function (e) {
       e.preventDefault()
       camera.openCamera((imagePath) => {
         $('#timage').attr('src', imagePath).removeClass('hide')
-        camera.savePhoto(imagePath, (retrivedImage) => { 
+        camera.savePhoto(imagePath, (retrivedImage) => {
           $('#imagepath').text(retrivedImage.nativeURL)
         })
       })
@@ -94,7 +119,7 @@ var createFunction = {
       e.target.setCustomValidity('')
     }
   },
-  getImagePath: function () { 
+  getImagePath: function () {
     if ($('#imagepath').text()) {
       return [$('#imagepath').text()]
     }
