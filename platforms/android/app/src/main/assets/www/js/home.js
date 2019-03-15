@@ -31,7 +31,7 @@ var homeFunction = {
         storageItem.find('.demensions').text('Demensions: ' + value.demensions)
         storageItem.find('.price').text('Price ' + value.price)
         storageItem.find('.reporter').text('Reporter: ' + value.reporter)
-        storageItem.find('.note').text('Note: ' + value.note)
+        storageItem.find('.note').text(value.note)
         if (value.features !== null && value.features.length > 0) {
           var featuresElement = []
           $.each(value.features, function (key, v) { 

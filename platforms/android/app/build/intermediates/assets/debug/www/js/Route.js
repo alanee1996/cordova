@@ -21,7 +21,6 @@ var route = {
         callback(obj)
       }
     })
-      window.disabledBackButton = true
   },
   create: function (data, callback) {
     if (data == null) {
@@ -33,6 +32,5 @@ var route = {
         callback(obj)
       }
     })
-      window.disabledBackButton = false
   },
 }

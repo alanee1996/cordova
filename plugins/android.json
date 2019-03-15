@@ -12,7 +12,20 @@
     },
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "my.edu.sei.myapp"
+    },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "my.edu.sei.myapp"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "my.edu.sei.myapp"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "my.edu.sei.myapp"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "my.edu.sei.myapp"
+    }
+  }
 }

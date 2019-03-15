@@ -9,9 +9,12 @@ var app = {
   },
 
   onDeviceReady: function () {
+    window.disabledBackButton = true
+    window.screen.orientation.lock('portrait')
     db = DBEntity
     db.test()
     db.checkTables()
+    // route.create({},createFunction.init)
     route.home({},homeFunction.init)
   }
 }
