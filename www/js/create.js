@@ -5,7 +5,7 @@ var createFunction = {
       var options = {
         date: new Date(),
         mode: 'time',
-        is24Hour: true,
+        is24Hour: true
       }
       datePicker.show(options, (d) => {
         // $('#time').blur()
@@ -70,11 +70,10 @@ var createFunction = {
       obj.reporter = e.target.reporter.value
       obj.features = createFunction.getFeatures($(e.target).find('input[name="storageFeature[]"]'))
       obj.images = createFunction.getImagePath()
-      db.createStorage(obj)
-      loading('Creating storage')
+      loading('Preparing confirm storage page')
       setTimeout(() => {
         closeLoading()
-        route.home({}, homeFunction.init)
+        route.confirm({model: obj}, confrimFunction.init)
       }, 3000)
     } catch(e) {
       alert(e.message)

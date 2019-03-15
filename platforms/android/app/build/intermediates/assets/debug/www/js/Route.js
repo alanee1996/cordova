@@ -33,4 +33,15 @@ var route = {
       }
     })
   },
+  confirm: function (data, callback) { 
+    if (data == null) {
+      data = {}
+    }
+    openPage('storageConfirmPage', data, function (obj) {
+      getDrawerAndNav(obj.title)
+      if (callback != null) {
+        callback(obj)
+      }
+    })
+  }
 }
