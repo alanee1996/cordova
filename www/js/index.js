@@ -14,8 +14,8 @@ var app = {
     db = DBEntity
     db.test()
     db.checkTables()
-    route.create({},createFunction.init)
-    // route.home({},homeFunction.init)
+    // route.create({},createFunction.init)
+    route.home({},homeFunction.init)
   }
 }
 

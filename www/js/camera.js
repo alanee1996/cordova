@@ -22,7 +22,6 @@ var camera = {
     console.log('CAMERA ERROR: ' + error)
   },
   savePhoto: function (imagePath, callback) {
-    console.log(imagePath)
     window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, (dirEntry) => {
       var stamp = new Date().getTime()
       var filename = stamp + '.jpg'
@@ -36,5 +35,11 @@ var camera = {
   },
   fileSavingError: function (error) {
     console.log('RESOLVE PATH ERROR: ' + error)
+  },
+  delete: function (imagePath,callback) { 
+    console.log(imagePath)
+    window.resolveLocalFileSystemURL(imagePath, (imageEntry) => { 
+      imageEntry.remove(callback,camera.fileSavingError)
+    })
   }
 }

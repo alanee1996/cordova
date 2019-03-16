@@ -1,0 +1,101 @@
+<div class="page">
+    <div class="header deep-purple">
+        <button class="right icon ion-android-arrow-back" id="menu-btn" name="button" onclick="backPage()"></button>
+        <h1 class="page-title" class="margin">Edit Storage</h1>
+    </div>
+    <div class="content has-header">
+        <div id="imagepath" class="hide"></div>
+        <form id="storage-update-form">
+            <div class="list padding">
+                <div class="item">
+                    <select id="storageType" name="storageType" required>
+                        <option selected value="">
+                            <label>Storage Type
+                                <i class="font-red">*</i>
+                            </label>
+                        </option>
+                        <option value="home">Home</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+                <div class="item label-float">
+                    <label>Demensions in square meters
+                        <i class="font-red">*</i>
+                    </label>
+                    <input id="demensions" max="8000" min="500" name="demensisons" onkeyup="createFunction.demensionKeyUp(event)" required type="number"/>
+                </div>
+                <div class="item label-float" id="time_container">
+                    <label>Time
+                        <i class="font-red">*</i>
+                    </label>
+                    <input id="time" name="time" required type="text"/>
+                </div>
+                <div class="item label-float" id="date_container">
+                    <label>Date
+                        <i class="font-red">*</i>
+                    </label>
+                    <input id="date" name="date" required type="text"/>
+                </div>
+                <div class="item no-border" id="storageFeatureContainer" style="padding-bottom:0px">
+                    <label>Storage features
+                        <i class="font-red">*</i>
+                    </label>
+                    <div class="space"></div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="left">
+                                <input class="blue" name="storageFeature[]" type="checkbox" value="private space"/>
+                            </div>
+                            <h2>Private Space</h2>
+                        </div>
+                        <div class="col">
+                            <div class="left">
+                                <input class="blue" name="storageFeature[]" type="checkbox" value="cctv"/>
+                            </div>
+                            <h2>CCTV</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="left">
+                                <input class="blue" name="storageFeature[]" type="checkbox" value="sharing space"/>
+                            </div>
+                            <h2>Sharing Space</h2>
+                        </div>
+                        <div class="col">
+                            <div class="left">
+                                <input class="blue" id="other" name="storageFeature[]" type="checkbox" value="others"/>
+                            </div>
+                            <h2>Others</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="item label-float hide" id="custom-other-container" style="padding-top:0px">
+                    <label>othres<i class="font-red">*</i>
+                    </label><input id="custom-other" name="custom-other" type="text"/>
+                </div>
+                <div class="item label-float">
+                    <label>Name of reporter
+                        <i class="font-red">*</i>
+                    </label>
+                    <input id="reporter" name="reporter" required type="text"/>
+                </div>
+                <div class="item label-float">
+                    <label>Monthly rent price
+                        <i class="font-red">*</i>
+                    </label>
+                    <input id="price" max="900" min="100" name="price" onkeyup="createFunction.priceKeyUp(event)" required type="number"></div>
+                    <div class="item label-float">
+                        <label>Notes</label>
+                        <textarea id="note" name="note" rows="5"></textarea>
+                    </div>
+                    <div class="item no-border">
+                        <img class="hide" id="timage"/>
+                        <button class="blue-grey-700 radius full" id="openCam">Add photo</button>
+                        <button class="red-800 radius full hide" id="delete_img">Delete Image</button>
+                    </div>
+                </div>
+                <button class="purple-900 circle icon ion-android-document shadow float-bottom-right big" type="submit"></button>
+            </form>
+        </div>
+    </div>

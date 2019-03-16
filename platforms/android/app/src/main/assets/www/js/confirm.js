@@ -9,13 +9,16 @@ var confrimFunction = {
     $(container).find('.date').text('Date: ' + obj.model.date)
     $(container).find('.time').text('Time: ' + obj.model.time)
     $(container).find('.note').text(obj.model.note)
+    if (obj.model.images !== null && obj.model.images.length > 0) {
+      $(container).find('img').attr('src',obj.model.images[0])
+    }
     if (obj.model.features !== null && obj.model.features.length > 0) {
       var featuresElement = []
       $.each(obj.model.features, function (key, v) {
         var feature = $('#confirm_feature_container').clone()
         feature.removeClass('hide')
         feature.removeAttr('id')
-        feature.text(v.feature)
+        feature.text(v)
         featuresElement.push(feature)
       })
       $(container).find('.storage-features').append(featuresElement)
@@ -26,7 +29,7 @@ var confrimFunction = {
       db.createStorage(obj.model)
       setTimeout(() => {
         closeLoading()
-        route.confirm({model: obj}, homeFunction.init)
+        route.home({model: obj}, homeFunction.init)
       }, 3000)
     })
   }

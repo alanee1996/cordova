@@ -43,5 +43,15 @@ var route = {
         callback(obj)
       }
     })
-  }
+  },
+  edit: function (data, callback) {
+    if (data == null) {
+      data = {}
+    }
+    openPage('editStorage', data, function (obj) {
+      if (callback != null) {
+        callback(obj)
+      }
+    })
+  },
 }

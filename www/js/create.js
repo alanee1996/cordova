@@ -28,6 +28,8 @@ var createFunction = {
     $('#openCam').click(function (e) {
       e.preventDefault()
       camera.openCamera((imagePath) => {
+        $('#openCam').addClass('hide')
+        $('#delete_img').removeClass('hide')
         $('#timage').attr('src', imagePath).removeClass('hide')
         camera.savePhoto(imagePath, (retrivedImage) => {
           $('#imagepath').text(retrivedImage.nativeURL)
@@ -37,8 +39,24 @@ var createFunction = {
     $('#other').change(function () {
       if ($('#other').prop('checked')) {
         $('#custom-other-container').removeClass('hide')
-      }else {
+      } else {
         $('#custom-other-container').addClass('hide')
+      }
+    })
+
+    $('#delete_img').click(function (e) {
+      e.preventDefault()
+      if ($('#imagepath').text()) {
+        var r = confirm('Are you sure you want to delete this image?')
+        if (r) { 
+          camera.delete($('#imagepath').text(), () => { 
+            //remove image
+            $('#delete_img').addClass('hide')
+            $('#openCam').removeClass('hide')
+            $('#imagepath').text('')
+            $('#timage').addClass('hide').removeAttr('src')
+          })
+        }
       }
     })
 

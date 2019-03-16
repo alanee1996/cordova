@@ -190,6 +190,15 @@ var DBEntity = {
       callback(model)
     }
   },
+  deleteImage: function (id, callback) {
+    if (DBEntity.db == null) { DBEntity.connect }
+    DBEntity.db.transaction(function (tx) {
+      var sql = 'delete from `storage_image` where `id` = ?'
+      tx.executeSql(sql, [id], function (trx, rs) {
+        callback(rs)
+      }, DBEntity.printDbError)
+    })
+  },
   printDbError: function (error) {
     alert(error.message ? error.message : 'Database error')
     console.log('ERROR')
@@ -202,15 +211,24 @@ var DBEntity = {
   flash: function () {
     if (DBEntity == null) {
       DBEntity.connect()
-      }
-      DBEntity.db.transaction(function(tx){
-        tx.executeSql('drop table `storage_image` ',[],(t,rs)=>console.log('storage image drop'),DBEntity.printDbError)
-      });
-      DBEntity.db.transaction(function(tx){
-        tx.executeSql('drop table `storage_feature` ',[],(t,rs)=>console.log('storage feature drop'),DBEntity.printDbError)
-      });
-      DBEntity.db.transaction(function(tx){
-        tx.executeSql('drop table `storage` ',[],(t,rs)=>console.log('storage drop'),DBEntity.printDbError)
-    });
-  }
+    }
+    DBEntity.db.transaction(function (tx) {
+      tx.executeSql('drop table `storage_image` ', [], (t, rs) => console.log('storage image drop'), DBEntity.printDbError)
+    })
+    DBEntity.db.transaction(function (tx) {
+      tx.executeSql('drop table `storage_feature` ', [], (t, rs) => console.log('storage feature drop'), DBEntity.printDbError)
+    })
+    DBEntity.db.transaction(function (tx) {
+      tx.executeSql('drop table `storage` ', [], (t, rs) => console.log('storage drop'), DBEntity.printDbError)
+    })
+  },
+  updateStorage: function (model, callback) {
+    if (DBEntity.db == null) { DBEntity.connect() }
+    DBEntity.db.transaction(function (tr) {
+      var sql1 = 'update `storage` set `type` = ? ,`demensions` = ? ,`date` = ? ,`time` = ? ,`price` = ? ,`note` = ? ,`reporter` = ? where `id` = ? '
+      tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) { 
+
+      },DBEntity.printDbError)
+    })
+  },
 }

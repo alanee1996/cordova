@@ -1,38 +1,51 @@
 <div class="drawer"></div>
 <div class="page">
     <div class="nav"></div>
-    <div class="content has-header">
+    <div
+        class="content has-header">
         <!--Content of page-->
         <div class="spance"></div>
         <div class="padding">
             <div class="list">
                 <div class="item icon ion-search">
-                    <input placeholder="Search" id="search" type="text" />
+                    <input id="search" placeholder="Search" type="text"/>
                 </div>
             </div>
         </div>
         <div class="spance"></div>
         <div class="spance"></div>
         <div class="list padding" id="storagelist">
-            <div id="no-result" class="item no-border align-center hide">
+            <div class="item no-border align-center hide" id="no-result">
                 <h1>No result found</h1>
             </div>
             <div class="list shadow radius white hide st-item" id="storage-item">
                 <div class="item">
                     <div class="item full">
-                        <img src="https://2.bp.blogspot.com/-ZgJCyhJ528Q/V45lSl_muEI/AAAAAAAAYG8/Le77YQbVxIIZe8gRfVYoG36dFp3O-zI2wCLcB/s1600/no-image.jpg" width="400" height="200"  />
+                        <img height="200" src="https://2.bp.blogspot.com/-ZgJCyhJ528Q/V45lSl_muEI/AAAAAAAAYG8/Le77YQbVxIIZe8gRfVYoG36dFp3O-zI2wCLcB/s1600/no-image.jpg" width="400"/>
                     </div>
                     <h2 class="storage-type">Storage type: abc</h2>
                     <p class="demensions">Demensions: 152cm x 152cm</p>
                     <p class="reporter"></p>
                     <h2 class="price">Price $200</h2>
-                    <span id="feature-container" class="text-small green radius padding hide"></span>
+                    <span class="text-small purple radius padding hide" id="feature-container"></span>
                     <div class="storage-features"></div>
                     <div class="space"></div>
-                    <p><strong>Note:</strong> <i class="note"></i></p>
-                    <p class="text-grey-500 watermark-date datetime">
-                            Created at 01-01-2019 12:56:00 am
+                    <p>
+                        <strong>Note:</strong>
+                        <i class="note"></i>
                     </p>
+                    <p class="text-grey-500 watermark-date datetime">
+                        Created at 01-01-2019 12:56:00 am
+                    </p>
+                    <div class="row-between">
+                        <div class="col-50"></div>
+                        <div class="col-20">
+                            <button class="light-blue-900 circle shadow icon ion-edit big edit"></button>
+                        </div>
+                        <div class="col-20">
+                            <button class="red-800 icon circle shadow ion-trash-b big delete"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
