@@ -262,44 +262,28 @@ var DBEntity = {
       }, DBEntity.printDbError)
       callback()
     })
+  },
+  deleteStorage: function (model, callback) {
+    if (DBEntity.db == null) { DBEntity.connect() }
+    DBEntity.db.transaction(function (tr) {
+      if (model.images && model.images.length > 0) {
+        $.each(model.images, (key, value) => {
+          camera.delete(value.path, function (result) {
+            DBEntity.deleteImage(value.id)
+          })
+        })
+      }
+      if (model.features && model.features.length > 0) {
+        $.each(model.features, (key, value) => {
+          tr.executeSql('delete from `storage_feature` where `storage_id` = ?', [model.id], (trx, rs) => {
+            console.log('storage feature deleted')
+          })
+        })
+      }
+      tr.executeSql('delete from `storage` where `id` = ?', [model.id], (trx, rs) => {
+        console.log('storage delete successful')
+        callback()
+      })
+    })
   }
-  // updateStorage: function (model, features, callback) {
-  //   if (DBEntity.db == null) { DBEntity.connect() }
-  //   DBEntity.db.transaction(function (tr) {
-  //     var sql1 = 'update `storage` set `type` = ? ,`demensions` = ? ,`date` = ? ,`time` = ? ,`price` = ? ,`note` = ? ,`reporter` = ? where `id` = ? '
-  //     var calledIndex = []
-  //     tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) {
-  //       $.each(features, (key, value) => {
-  //         var target = where(model.features, c => c.feature === value.feature)
-  //         var index = whereIndex(model.features, c => c.feature === value.feature)
-  //         if (index != null) {
-  //           calledIndex.push(index)
-  //         }
-  //         var sql2 = 'update `storage_feature` set feature = ? where `storage_id` = ?'
-  //         if (!target) {
-  //           trx.executeSql(sql2, [value.feature, target.storage_id], function (trx2, rs2) {
-  //             console.log('update storage feature success and feature is exist replaced successful')
-  //           }, DBEntity.printDbError)
-  //         } else {
-  //           target = where(model.features, c => c.feature !== value.feature && c.isCustom === true)
-  //           index = whereIndex(model.features, c => c.feature === value.feature)
-  //           if (index != null) {
-  //             calledIndex.push(index)
-  //           }
-  //           if (!target) {
-  //             trx.executeSql(sql2, [value.feature, target.storage_id], function (trx2, rs2) {
-  //               console.log('update storage feature other success and feature exist replaced successful')
-  //             }, DBEntity.printDbError)
-  //           }else {
-  //             var sql3 = 'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)'
-  //             trx.executeSql(sql3, [value.feature, model[0].storage_id], function (trx3, rs3) {
-  //               console.log('update storage feature other success and feature exist replaced successful')
-  //             }, DBEntity.printDbError)
-  //           }
-  //         }
-  //       })
-
-//     }, DBEntity.printDbError)
-//   })
-// }
 }

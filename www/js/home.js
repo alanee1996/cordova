@@ -28,7 +28,7 @@ var homeFunction = {
       $('#no-result').addClass('hide')
       $.each(model, function (key, value) {
         var storageItem = $('#storage-item').clone()
-        storageItem.attr('id', 'storage-item_' + value.id).removeClass('hide')
+        storageItem.attr('id', 'storage-item_' + value.id).removeClass('hide').addClass('storage')
         // bind image
         if (value !== null && value.images.length > 0) {
           storageItem.find('img').attr('src', value.images[0].path)
@@ -39,6 +39,7 @@ var homeFunction = {
         storageItem.find('.reporter').text('Reporter: ' + value.reporter)
         storageItem.find('.note').text(value.note)
         storageItem.find('.edit').attr('onclick', 'homeFunction.edit(' + JSON.stringify(value) + ')')
+        storageItem.find('.delete').attr('onclick', 'homeFunction.delete(' + JSON.stringify(value) + ')')
         if (value.features !== null && value.features.length > 0) {
           var featuresElement = []
           $.each(value.features, function (key, v) {
@@ -61,6 +62,16 @@ var homeFunction = {
     route.edit({model: model,title: 'Edit Storage'}, editFunction.init)
   },
   delete: function (model) {
-    console.log(model)
+    var r = confirm("Are you sure want to delete this storage item ?")
+    if (r) { 
+      loading('Deleting the storage item')
+      db.deleteStorage(model, () => { 
+        setTimeout(() => {
+          closeLoading()
+          $('#storagelist').children('.storage').remove()
+          homeFunction.getStorageData()
+        }, 3000)
+      })
+    }
   }
 }
