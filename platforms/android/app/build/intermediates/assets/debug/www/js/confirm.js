@@ -10,7 +10,7 @@ var confrimFunction = {
     $(container).find('.time').text('Time: ' + obj.model.time)
     $(container).find('.note').text(obj.model.note)
     if (obj.model.images !== null && obj.model.images.length > 0) {
-      $(container).find('img').attr('src',obj.model.images[0])
+      $(container).find('img').attr('src', obj.model.images[0])
     }
     if (obj.model.features !== null && obj.model.features.length > 0) {
       var featuresElement = []
@@ -29,7 +29,10 @@ var confrimFunction = {
       db.createStorage(obj.model)
       setTimeout(() => {
         closeLoading()
-        route.home({model: obj}, homeFunction.init)
+        if (document.getElementById('home.html')) {
+          document.getElementById('home.html').remove()
+        }
+        route.home({}, homeFunction.init)
       }, 3000)
     })
   }

@@ -117,9 +117,6 @@ var editFunction = {
         console.log('Update successful')
         setTimeout(() => {
           closeLoading()
-          if (document.getElementById('home.html')) {
-            document.getElementById('home.html').remove()
-          }
           route.home({}, homeFunction.init)
         }, 3000)
       })

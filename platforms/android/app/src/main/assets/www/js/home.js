@@ -1,20 +1,62 @@
 var homeFunction = {
   init: function (obj) {
-    if (document.getElementById('createStorage.html')) {
-      document.getElementById('createStorage.html').remove()
+    if (document.getElementById('login.html')) {
+      document.getElementById('login.html').remove()
     }
     if (document.getElementById('storageConfirmPage.html')) {
       document.getElementById('storageConfirmPage.html').remove()
+    }
+    if (document.getElementById('createStorage.html')) {
+      document.getElementById('createStorage.html').remove()
+    }
+    if (document.getElementById('editStorage.html')) {
+      document.getElementById('editStorage.html').remove()
     }
 
     var search = document.getElementById('search')
     search.addEventListener('keyup', function (e) {
       if (e.keyCode === 13) {
-        alert(search.value)
         // perform search function
-        search.blur()
+        var searchValue = {
+          value: search.value,
+          max: $('#amount').val()
+        }
+        db.search(searchValue, (m) => {
+          loading('Searching')
+          setTimeout(() => {
+            closeLoading()
+            $('#storagelist').children('.storage').remove()
+            if (m) {
+              homeFunction.buildStorageList(m)
+            }else {
+              $('#no-result').removeClass('hide')
+            }
+          }, 3000)
+          search.blur()
+        })
         e.preventDefault()
       }
+    })
+    $('#amount').change(function () {
+      var amount = $(this).val()
+      $('#max-amount').text(amount)
+      var searchValue = {
+        value: $('#search').val(),
+        max: $('#amount').val()
+      }
+      db.search(searchValue, (m) => {
+        loading('Filtering')
+        setTimeout(() => {
+          closeLoading()
+          $('#storagelist').children('.storage').remove()
+          if (m) {
+            homeFunction.buildStorageList(m)
+          }else {
+            $('#no-result').removeClass('hide')
+          }
+        }, 2000)
+        search.blur()
+      })
     })
     homeFunction.getStorageData()
   },
@@ -31,7 +73,7 @@ var homeFunction = {
         storageItem.attr('id', 'storage-item_' + value.id).removeClass('hide').addClass('storage')
         // bind image
         if (value !== null && value.images.length > 0) {
-          storageItem.find('img').attr('src', value.images[0].path)
+          storageItem.find('img').attr('src', value.images[0].path).attr('onclick', 'browseImage(' + '"' + value.images[0].path + '"' + ')')
         }
         storageItem.find('.storage-type').text('Storage type: ' + value.type)
         storageItem.find('.demensions').text('Demensions: ' + value.demensions)
@@ -62,13 +104,13 @@ var homeFunction = {
     route.edit({model: model,title: 'Edit Storage'}, editFunction.init)
   },
   delete: function (model) {
-    var r = confirm("Are you sure want to delete this storage item ?")
-    if (r) { 
+    var r = confirm('Are you sure want to delete this storage item ?')
+    if (r) {
       loading('Deleting the storage item')
-      db.deleteStorage(model, () => { 
-        $('#storagelist').children('.storage').remove()
+      db.deleteStorage(model, () => {
         setTimeout(() => {
           closeLoading()
+          $('#storagelist').children('.storage').remove()
           homeFunction.getStorageData()
         }, 3000)
       })

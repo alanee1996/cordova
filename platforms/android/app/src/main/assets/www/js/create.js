@@ -1,8 +1,8 @@
 var createFunction = {
   init: function (obj) {
-    if (document.getElementById('home.html')) {
-      document.getElementById('home.html').remove()
-    }
+    // if (document.getElementById('home.html')) {
+    //   document.getElementById('home.html').remove()
+    // }
     $('#time_container').click(function () {
       $('#time').blur()
       var options = {

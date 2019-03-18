@@ -130,7 +130,7 @@ var DBEntity = {
     DBEntity.db.transaction(function (tx) {
       var model = []
       tx.executeSql(
-        'select * from `storage`',
+        'select * from `storage` order by `id` DESC',
         [],
         function (tx, rs) {
           console.log('data is selecting')
@@ -146,10 +146,34 @@ var DBEntity = {
       )
     })
   },
+  search: function (search, callback) {
+    if (DBEntity.db == null) {
+      DBEntity.connect()
+    }
+    var sql = "select * from `storage` where (`type` LIKE '%'|| ? ||'%' or `reporter` LIKE '%'|| ? ||'%') and `price` between 100 and ? order by `id` DESC"
+    DBEntity.db.transaction(function (tx) {
+      var model = []
+      tx.executeSql(
+        sql,
+        [search.value, search.value, search.max],
+        function (tx, rs) {
+          console.log('searching........')
+          for (var i = 0; i < rs.rows.length; i++) {
+            var target = rs.rows.item(i)
+            target.images = []
+            target.features = []
+            model.push(target)
+          }
+          DBEntity.getStorageImages(model, callback)
+        },
+        DBEntity.printDbError
+      )
+    })
+  },
   getStorageImages: function (model, callback) {
     if (model != null && model.length > 0) {
-      var start = model[0].id
-      var end = model[model.length - 1].id
+      var start = model[model.length - 1].id
+      var end = model[0].id
       var sql = start === end ? 'select * from `storage_image` where `storage_id` = ?' : 'select * from `storage_image` where `storage_id` between ? and ?'
       var params = start === end ? [start] : [start, end]
       DBEntity.db.transaction(function (tx) {
@@ -171,8 +195,8 @@ var DBEntity = {
   },
   getStorageFeatures: function (model, callback) {
     if (model != null && model.length > 0) {
-      var start = model[0].id
-      var end = model[model.length - 1].id
+      var start = model[model.length - 1].id
+      var end = model[0].id
       var sql = start === end ? 'select * from `storage_feature` where `storage_id` = ?' : 'select * from `storage_feature` where `storage_id` between ? and ?'
       var params = start === end ? [start] : [start, end]
       DBEntity.db.transaction(function (tx) {

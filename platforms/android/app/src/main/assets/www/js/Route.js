@@ -8,6 +8,15 @@ function getDrawerAndNav (title) {
   })
 }
 
+function getNavBack (title) {
+  if (title == null || title == undefined) {
+    title = 'Mystorage'
+  }
+  $('.nav-back').load('nav_back.html', function () {
+    $('.page-title-back').append(title)
+  })
+}
+
 var route = {
   login: function () {},
 
@@ -27,18 +36,18 @@ var route = {
       data = {}
     }
     openPage('createStorage', data, function (obj) {
-      getDrawerAndNav(obj.title)
+      getNavBack(obj.title)
       if (callback != null) {
         callback(obj)
       }
     })
   },
-  confirm: function (data, callback) { 
+  confirm: function (data, callback) {
     if (data == null) {
       data = {}
     }
     openPage('storageConfirmPage', data, function (obj) {
-      getDrawerAndNav(obj.title)
+      getNavBack(obj.title)
       if (callback != null) {
         callback(obj)
       }
@@ -49,9 +58,19 @@ var route = {
       data = {}
     }
     openPage('editStorage', data, function (obj) {
+      getNavBack(obj.title)
       if (callback != null) {
         callback(obj)
       }
     })
   },
+  viewImage: function (data, callback) {
+    if (data == null) {
+      data = {}
+    }
+    openPage('imageWindow', data, function (obj) {
+      getNavBack(obj.title)
+      callback(obj)
+    })
+  }
 }
