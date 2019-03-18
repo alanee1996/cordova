@@ -1,6 +1,5 @@
 var confrimFunction = {
   init: function (obj) {
-    console.log(obj.model)
     var container = $('#confirm_storage_item')
     $(container).find('.storageType').text('Storage Type: ' + obj.model.type)
     $(container).find('.demensions').text('Demensions: ' + obj.model.demensions)

@@ -114,6 +114,9 @@ var editFunction = {
       obj.images = editFunction.getImagePath()
       loading('updating storage')
       db.updateStorage(obj, () => {
+        if (document.getElementById('home.html')) {
+          document.getElementById('home.html').remove()
+        }
         console.log('Update successful')
         setTimeout(() => {
           closeLoading()
