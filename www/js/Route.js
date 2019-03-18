@@ -2,7 +2,11 @@ function getDrawerAndNav (title) {
   if (title == null || title == undefined) {
     title = 'Mystorage'
   }
-  $('.drawer').load('drawer.html')
+  var user = loginFunction.getCurrenyUser()
+  $('.drawer').load('drawer.html', function () { 
+    $('#d_profile_image').attr('src', user.path)
+    $('#email').text(user.email)
+  })
   $('.nav').load('nav.html', function () {
     $('.page-title').append(title)
   })

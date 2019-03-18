@@ -43,6 +43,13 @@ var DBEntity = {
     sql3 += ' `storage_id` INTEGER NOT NULL,'
     sql3 += ' FOREIGN KEY (`storage_id`) REFERENCES `storage`(`id`))'
 
+    // additional feature user table
+    var sql4 = 'CREATE TABLE IF NOT EXISTS `user` ('
+    sql4 += ' `id` INTEGER PRIMARY KEY AUTOINCREMENT,'
+    sql4 += ' `email` TEXT NOT NULL UNIQUE,'
+    sql4 += ' `password` TEXT NOT NULL,'
+    sql4 += ' `path` TEXT )'
+
     DBEntity.db.transaction(function (tx) {
       tx.executeSql(
         sql,
@@ -65,6 +72,24 @@ var DBEntity = {
         [],
         function (tx, rs) {
           console.log('storage image table created')
+        },
+        DBEntity.printDbError
+      )
+      tx.executeSql(
+        sql4,
+        [],
+        function (tx, rs) {
+          tx.executeSql('select count(*) as rows from `user`', [], (tx, rs) => {
+            if (rs.rows.length > 0) {
+              console.log(rs.rows.item(0))
+              if (rs.rows.item(0).rows === 0) {
+                tx.executeSql('insert into `user` (`email`,`password`,`path`) values (?,?,?)', ['abc@example.com', '123123', 'img/alanee.jpg'], (tx, rs) => {
+                  console.log('default user insert successful')
+                }, DBEntity.printDbError)
+              }
+            }
+          })
+          console.log('user table created')
         },
         DBEntity.printDbError
       )
@@ -307,6 +332,20 @@ var DBEntity = {
       tr.executeSql('delete from `storage` where `id` = ?', [model.id], (trx, rs) => {
         console.log('storage delete successful')
         callback()
+      })
+    })
+  },
+  selectUser: function (loginModel, callback) {
+    if (DBEntity.db === null) { DBEntity.connect() }
+    DBEntity.db.transaction(function (tr) {
+      var model = {}
+      tr.executeSql('select * from `user` where `email` = ? and `password` = ?', [loginModel.email, loginModel.password], (trx, rs) => {
+        if (rs.rows.length > 0) {
+          model = rs.rows.item(0)
+          callback(model)
+        }else {
+          callback(null)
+        }
       })
     })
   }

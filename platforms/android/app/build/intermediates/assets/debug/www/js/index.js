@@ -17,7 +17,7 @@ var app = {
     if (sessionStorage.getItem('user')) {
       route.home({}, homeFunction.init)
     } else {
-      route.login({}, null)
+      route.login({}, loginFunction.init)
     }
   }
 }

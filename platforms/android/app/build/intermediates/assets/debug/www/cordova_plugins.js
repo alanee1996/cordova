@@ -234,6 +234,14 @@ module.exports = [
     "clobbers": [
       "datePicker"
     ]
+  },
+  {
+    "id": "cordova-plugin-password-crypto.client",
+    "file": "plugins/cordova-plugin-password-crypto/www/client.js",
+    "pluginId": "cordova-plugin-password-crypto",
+    "clobbers": [
+      "community.PasswordCrypto"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -245,7 +253,8 @@ module.exports.metadata =
   "cordova-plugin-screen-orientation": "3.0.1",
   "cordova-plugin-camera": "4.0.3",
   "cordova-plugin-file": "6.0.1",
-  "cordova-plugin-datepicker": "0.9.3"
+  "cordova-plugin-datepicker": "0.9.3",
+  "cordova-plugin-password-crypto": "1.0.0"
 };
 // BOTTOM OF METADATA
 });

@@ -1,9 +1,8 @@
 <!--menu drawar-->
 <div class="menu purple-900 cover blend-multiply" id="rside-menu-content">
         <div class="cover align-center padding margin">
-            <img class="avatar circle border-white shadow" src="img/alanee.jpg" width="100"/>
-            <h1 class="text-teal-300">Alanee</h1>
-            <p class="text-grey">alanee1996@mail.com</p>
+            <img class="avatar circle border-white shadow" id="d_profile_image" src="img/alanee.jpg" width="100"/>
+            <p id="email" class="text-grey"></p>
         </div>
         <div class="list no-border">
             <a class="item" onclick="route.home({},homeFunction.init)" >
@@ -18,11 +17,11 @@
                 </div>
                 <h1 class="text-grey-300">Create Storage</h1>
             </a>
-            <a class="item">
+            <a class="item" onclick="loginFunction.logout()">
                 <div class="left">
                     <i class="icon ion-android-exit grey-300"></i>
                 </div>
-                <h1 class="text-grey-300">Logout</h1>
+                <h1 class="text-grey-300" >Logout</h1>
             </a>
         </div>
     </div>
