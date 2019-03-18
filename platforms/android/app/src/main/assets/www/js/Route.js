@@ -18,7 +18,16 @@ function getNavBack (title) {
 }
 
 var route = {
-  login: function () {},
+  login: function (data, callback) {
+    if (data === null) {
+      data = {}
+    }
+    openPage('login', data, function (obj) {
+      if (callback !== null) {
+        callback(obj)
+      }
+    })
+  },
 
   home: function (data, callback) {
     if (data == null) {

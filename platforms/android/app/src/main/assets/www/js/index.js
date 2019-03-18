@@ -14,8 +14,11 @@ var app = {
     db = DBEntity
     db.test()
     db.checkTables()
-    // route.create({},createFunction.init)
-    route.home({},homeFunction.init)
+    if (sessionStorage.getItem('user')) {
+      route.home({}, homeFunction.init)
+    } else {
+      route.login({}, null)
+    }
   }
 }
 
