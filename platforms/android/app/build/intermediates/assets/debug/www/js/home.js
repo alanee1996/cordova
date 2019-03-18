@@ -6,6 +6,7 @@ var homeFunction = {
     if (document.getElementById('storageConfirmPage.html')) {
       document.getElementById('storageConfirmPage.html').remove()
     }
+
     var search = document.getElementById('search')
     search.addEventListener('keyup', function (e) {
       if (e.keyCode === 13) {

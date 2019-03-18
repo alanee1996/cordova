@@ -1,5 +1,8 @@
 var createFunction = {
   init: function (obj) {
+    if (document.getElementById('home.html')) {
+      document.getElementById('home.html').remove()
+    }
     $('#time_container').click(function () {
       $('#time').blur()
       var options = {
@@ -48,9 +51,9 @@ var createFunction = {
       e.preventDefault()
       if ($('#imagepath').text()) {
         var r = confirm('Are you sure you want to delete this image?')
-        if (r) { 
-          camera.delete($('#imagepath').text(), () => { 
-            //remove image
+        if (r) {
+          camera.delete($('#imagepath').text(), () => {
+            // remove image
             $('#delete_img').addClass('hide')
             $('#openCam').removeClass('hide')
             $('#imagepath').text('')
@@ -67,9 +70,9 @@ var createFunction = {
     $.each(elements, function (key, element) {
       var value = element.value
       if ($(element).prop('checked') && $(element).attr('id') === 'other') {
-        features.push($('#custom-other').val())
+        features.push({feature: $('#custom-other').val(),isCustom: 1})
       } else if ($(element).prop('checked')) {
-        features.push(value)
+        features.push({feature: value,isCustom: 0})
       }
     })
     return features

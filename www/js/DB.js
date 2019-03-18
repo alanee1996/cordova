@@ -34,6 +34,7 @@ var DBEntity = {
     sql2 += ' `id`  INTEGER PRIMARY KEY AUTOINCREMENT,'
     sql2 += ' `storage_id` INTEGER NOT NULL ,'
     sql2 += ' `feature` TEXT NOT NULL ,'
+    sql2 += ' `isCustom` INTEGER NOT NULL, '
     sql2 += ' FOREIGN KEY (`storage_id`) REFERENCES `storage`(`id`))'
 
     var sql3 = 'CREATE TABLE IF NOT EXISTS `storage_image` ('
@@ -76,7 +77,7 @@ var DBEntity = {
     var sql =
     'insert into `storage` (`type`,`demensions`,`date`,`time`,`price`,`note`,`reporter`) values (?,?,?,?,?,?,?)'
     var sql2 =
-    'insert into `storage_feature` (`feature` , `storage_id`)  values(?,?)'
+    'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)'
     var sql3 = 'insert into `storage_image` (`path`, `storage_id`) values(?,?)'
     DBEntity.db.transaction(function (tx) {
       tx.executeSql(
@@ -97,7 +98,7 @@ var DBEntity = {
             for (var i = 0; i < obj.features.length; i++) {
               trx.executeSql(
                 sql2,
-                [obj.features[i], storage_id],
+                [obj.features[i].feature, storage_id, obj.features[i].isCustom],
                 function (tx2, rs2) {
                   console.log('storage feature insert successful')
                 },
@@ -223,12 +224,82 @@ var DBEntity = {
     })
   },
   updateStorage: function (model, callback) {
-    if (DBEntity.db == null) { DBEntity.connect() }
+    if (DBEntity.db === null) { DBEntity.connect() }
     DBEntity.db.transaction(function (tr) {
       var sql1 = 'update `storage` set `type` = ? ,`demensions` = ? ,`date` = ? ,`time` = ? ,`price` = ? ,`note` = ? ,`reporter` = ? where `id` = ? '
-      tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) { 
+      // update storage and storage feature
+      tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) {
+        var sql2 = 'delete from  `storage_feature` where `storage_id` = ?'
+        // delete all the previous storage_feature and insert again will be the better solution to update the storage feature
+        trx.executeSql(sql2, [model.id], (trx2, rs2) => {
+          if (model.features && model.features.length > 0) {
+            for (var i = 0; i < model.features.length; i++) {
+              trx.executeSql(
+                'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)',
+                [model.features[i].feature, model.id, model.features[i].isCustom],
+                function (tx2, rs2) {
+                  console.log('storage feature update successful')
+                },
+                DBEntity.printDbError
+              )
+            }
+          }
+        }, DBEntity.printDbError)
 
-      },DBEntity.printDbError)
+        // update image
+        if (model.images && model.images.length > 0) {
+          for (var i = 0; i < model.images.length; i++) {
+            trx.executeSql(
+              'insert into `storage_image` (`path`, `storage_id`) values(?,?)',
+              [model.images[i], model.id],
+              function (tx2, rs2) {
+                console.log('Storage image update successful')
+              },
+              DBEntity.printDbError
+            )
+          }
+        }
+      }, DBEntity.printDbError)
+      callback()
     })
-  },
+  }
+  // updateStorage: function (model, features, callback) {
+  //   if (DBEntity.db == null) { DBEntity.connect() }
+  //   DBEntity.db.transaction(function (tr) {
+  //     var sql1 = 'update `storage` set `type` = ? ,`demensions` = ? ,`date` = ? ,`time` = ? ,`price` = ? ,`note` = ? ,`reporter` = ? where `id` = ? '
+  //     var calledIndex = []
+  //     tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) {
+  //       $.each(features, (key, value) => {
+  //         var target = where(model.features, c => c.feature === value.feature)
+  //         var index = whereIndex(model.features, c => c.feature === value.feature)
+  //         if (index != null) {
+  //           calledIndex.push(index)
+  //         }
+  //         var sql2 = 'update `storage_feature` set feature = ? where `storage_id` = ?'
+  //         if (!target) {
+  //           trx.executeSql(sql2, [value.feature, target.storage_id], function (trx2, rs2) {
+  //             console.log('update storage feature success and feature is exist replaced successful')
+  //           }, DBEntity.printDbError)
+  //         } else {
+  //           target = where(model.features, c => c.feature !== value.feature && c.isCustom === true)
+  //           index = whereIndex(model.features, c => c.feature === value.feature)
+  //           if (index != null) {
+  //             calledIndex.push(index)
+  //           }
+  //           if (!target) {
+  //             trx.executeSql(sql2, [value.feature, target.storage_id], function (trx2, rs2) {
+  //               console.log('update storage feature other success and feature exist replaced successful')
+  //             }, DBEntity.printDbError)
+  //           }else {
+  //             var sql3 = 'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)'
+  //             trx.executeSql(sql3, [value.feature, model[0].storage_id], function (trx3, rs3) {
+  //               console.log('update storage feature other success and feature exist replaced successful')
+  //             }, DBEntity.printDbError)
+  //           }
+  //         }
+  //       })
+
+//     }, DBEntity.printDbError)
+//   })
+// }
 }

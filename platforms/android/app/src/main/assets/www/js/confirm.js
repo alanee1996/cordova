@@ -18,7 +18,7 @@ var confrimFunction = {
         var feature = $('#confirm_feature_container').clone()
         feature.removeClass('hide')
         feature.removeAttr('id')
-        feature.text(v)
+        feature.text(v.feature)
         featuresElement.push(feature)
       })
       $(container).find('.storage-features').append(featuresElement)

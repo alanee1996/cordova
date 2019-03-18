@@ -1,9 +1,12 @@
 var editFunction = {
+  obj: null,
   init: function (obj) {
     if (!obj.model) {
+      editFunction.obj = obj
       $('#storage-update-form').addClass('hide')
       alert('The data missing during passing from previous page')
     } else {
+      $('#storageId').text(obj.model.id)
       $('#storageType').val(obj.model.type)
       $('#demensions').val(obj.model.demensions)
       $('#time').val(obj.model.time)
@@ -30,12 +33,39 @@ var editFunction = {
         $('#delete_img').removeClass('hide')
       }
     }
+    if ($('#other').prop('checked')) { 
+      $('#custom-other-container').removeClass('hide')
+    }
     $('#other').change(function () {
       if ($('#other').prop('checked')) {
         $('#custom-other-container').removeClass('hide')
       } else {
         $('#custom-other-container').addClass('hide')
       }
+    })
+    $('#time_container').click(function () {
+      $('#time').blur()
+      var options = {
+        date: new Date(),
+        mode: 'time',
+        is24Hour: true
+      }
+      datePicker.show(options, (d) => {
+        // $('#time').blur()
+        $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
+      }, (e) => alert(e))
+    })
+    $('#date_container').click(function () {
+      // $('#date').blur()
+      var options = {
+        date: new Date(),
+        mode: 'date',
+        minDate: new Date()
+      }
+      datePicker.show(options, (d) => {
+        // $('#date').blur()
+        $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
+      }, (e) => alert(e))
     })
     $('#openCam').click(function (e) {
       e.preventDefault()
@@ -53,7 +83,7 @@ var editFunction = {
       if ($('#imagepath').text()) {
         var r = confirm('Are you sure you want to delete this image?')
         if (r) {
-          db.deleteImage(obj.model.id, (rs) => { 
+          db.deleteImage(obj.model.id, (rs) => {
             camera.delete($('#imagepath').text(), () => {
               // remove image
               $('#delete_img').addClass('hide')
@@ -72,6 +102,7 @@ var editFunction = {
     try {
       editFunction.validation(e)
       obj = {}
+      obj.id = $('#storageId').text()
       obj.type = e.target.storageType.value
       obj.demensions = parseFloat(e.target.demensisons.value)
       obj.date = e.target.date.value
@@ -81,11 +112,17 @@ var editFunction = {
       obj.reporter = e.target.reporter.value
       obj.features = editFunction.getFeatures($(e.target).find('input[name="storageFeature[]"]'))
       obj.images = editFunction.getImagePath()
-      loading('Preparing confirm storage page')
-      setTimeout(() => {
-        closeLoading()
-        route.confirm({model: obj}, confrimFunction.init)
-      }, 3000)
+      loading('updating storage')
+      db.updateStorage(obj, () => {
+        console.log('Update successful')
+        setTimeout(() => {
+          closeLoading()
+          if (document.getElementById('home.html')) {
+            document.getElementById('home.html').remove()
+          }
+          route.home({}, homeFunction.init)
+        }, 3000)
+      })
     } catch(e) {
       alert(e.message)
     }
@@ -95,9 +132,9 @@ var editFunction = {
     $.each(elements, function (key, element) {
       var value = element.value
       if ($(element).prop('checked') && $(element).attr('id') === 'other') {
-        features.push($('#custom-other').val())
+        features.push({feature: $('#custom-other').val(),isCustom: 1})
       } else if ($(element).prop('checked')) {
-        features.push(value)
+        features.push({feature: value,isCustom: 0})
       }
     })
     return features
