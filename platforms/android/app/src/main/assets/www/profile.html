@@ -1,0 +1,36 @@
+<div class="page">
+    <div class="nav-back"></div>
+    <div class="content has-header">
+        <div class="hide" id="img_path_profile"></div>
+        <div class="list">
+            <div class="item">
+                <div class="cover align-center padding margin">
+                    <img class="circle border-white shadow" id="p_profile_image" src="img/no-image.jpg"/>
+                    <div class="popover" id="popoverImg">
+                        <div class="list">
+                            <div class="item" onclick="route.viewImage({image:$('#img_path_profile').text()},imageFunction.init)">
+                                <h1>View Image</h1>
+                            </div>
+                            <div class="item" id="changeImage">
+                                <h1>Change Image</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form id="profileForm">
+                <div class="item label-float">
+                    <label>Email</label>
+                    <input id="p_email" required type="email"/>
+                </div>
+                <div class="item label-float">
+                    <label>Password</label>
+                    <input id="p_password" type="password"></div>
+                    <div clsss="space"></div>
+                    <div class="item">
+                        <button class="pink radius full" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

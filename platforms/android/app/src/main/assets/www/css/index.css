@@ -18,3 +18,8 @@
 .font-red {
     color: red !important;
 }
+
+.profile {
+    width: 200px !important;
+    height: 200px !important;
+}

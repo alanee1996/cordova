@@ -348,5 +348,32 @@ var DBEntity = {
         }
       })
     })
+  },
+  updateUser: function (model, callback) {
+    if (DBEntity.db === null) { DBEntity.connect() }
+    var user = JSON.parse(sessionStorage.getItem('user'))
+    DBEntity.db.transaction(function (tr) {
+      var sql = 'update user set `email` = ? '
+      var params = [model.email]
+      if (model.password) {
+        sql += ', `password` = ?'
+        params[params.length] = model.password
+      }
+      if (model.path) {
+        sql += ', `path` = ?'
+        params[params.length] = model.path
+        if (user.path !== 'img/alanee.jpg' && user.path !== model.path) {
+          camera.delete(user.path, () => {
+            console.log('previous profile image delete')
+          })
+        }
+      }
+      tr.executeSql(sql , params, (trx, rs) => {
+        trx.executeSql('select * from `user` where `id` = ?', [user.id], (trx2, rs2) => {
+          sessionStorage.setItem('user', JSON.stringify(rs2.rows.item(0)))
+          callback()
+        })
+      })
+    })
   }
 }

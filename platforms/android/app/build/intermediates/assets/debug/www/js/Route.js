@@ -85,5 +85,14 @@ var route = {
       getNavBack(obj.title)
       callback(obj)
     })
+  },
+  profile: function (data, callback) { 
+    if (data == null) {
+      data = {}
+    }
+    openPage('profile', data, function (obj) {
+      getNavBack(obj.title)
+      callback(obj)
+    })
   }
 }

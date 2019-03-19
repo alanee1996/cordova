@@ -12,6 +12,9 @@ var homeFunction = {
     if (document.getElementById('editStorage.html')) {
       document.getElementById('editStorage.html').remove()
     }
+    if (document.getElementById('profile.html')) {
+      document.getElementById('profile.html').remove()
+    }
 
     var search = document.getElementById('search')
     search.addEventListener('keyup', function (e) {
