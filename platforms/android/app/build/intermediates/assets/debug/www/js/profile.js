@@ -1,5 +1,8 @@
 var profileFunction = {
-  init: function (obj) {
+    init: function (obj) {
+        if (document.getElementById('home.html')) {
+            document.getElementById('home.html').remove()
+          }
     var user = loginFunction.getCurrenyUser()
     if (user) {
       if (user.path) {
@@ -26,7 +29,9 @@ var profileFunction = {
   formSubmit: function (e) {
     var model = {email: $('#p_email').val(),password: $('#p_password').val(),path: $('#img_path_profile').text()}
     DBEntity.updateUser(model, () => {
-      alert('user update')
+        var r = confirm('User profile updated')
+        route.home({}, homeFunction.init)
+      
     })
     e.preventDefault()
   }
