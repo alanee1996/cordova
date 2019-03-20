@@ -25,14 +25,19 @@ var confrimFunction = {
 
     $('#confirm_btn').click(function () {
       loading('Creating storage')
-      db.createStorage(obj.model)
-      setTimeout(() => {
-        closeLoading()
-        if (document.getElementById('home.html')) {
-          document.getElementById('home.html').remove()
+      db.createStorage(obj.model, (condition) => {
+        if (condition) {
+          setTimeout(() => {
+            closeLoading()
+            if (document.getElementById('home.html')) {
+              document.getElementById('home.html').remove()
+            }
+            route.home({}, homeFunction.init)
+          }, 3000)
+        }else {
+          alert('The storage item is duplicate in the database')
         }
-        route.home({}, homeFunction.init)
-      }, 3000)
+      })
     })
   }
 }

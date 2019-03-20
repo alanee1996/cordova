@@ -95,57 +95,64 @@ var DBEntity = {
       )
     })
   },
-  createStorage: function (obj) {
+  createStorage: function (obj, callback) {
     if (DBEntity == null) {
       DBEntity.connect()
     }
-    var sql =
-    'insert into `storage` (`type`,`demensions`,`date`,`time`,`price`,`note`,`reporter`) values (?,?,?,?,?,?,?)'
-    var sql2 =
-    'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)'
-    var sql3 = 'insert into `storage_image` (`path`, `storage_id`) values(?,?)'
-    DBEntity.db.transaction(function (tx) {
-      tx.executeSql(
-        sql,
-        [
-          obj.type,
-          obj.demensions,
-          obj.date,
-          obj.time,
-          obj.price,
-          obj.note,
-          obj.reporter
-        ],
-        function (trx, rs) {
-          console.log('storage insert successful')
-          var storage_id = rs.insertId
-          if ((obj.features != null || obj.features != undefined) && storage_id != null) {
-            for (var i = 0; i < obj.features.length; i++) {
-              trx.executeSql(
-                sql2,
-                [obj.features[i].feature, storage_id, obj.features[i].isCustom],
-                function (tx2, rs2) {
-                  console.log('storage feature insert successful')
-                },
-                DBEntity.printDbError
-              )
-            }
-          }
-          if ((obj.images != null || obj.images != undefined) && storage_id != null) {
-            for (var i = 0; i < obj.images.length; i++) {
-              trx.executeSql(
-                sql3,
-                [obj.images[i], storage_id],
-                function (tx2, rs2) {
-                  console.log('Storage image insert successful')
-                },
-                DBEntity.printDbError
-              )
-            }
-          }
-        },
-        DBEntity.printDbError
-      )
+    DBEntity.checkDuplicatie(obj, (condition) => {
+      if (condition) {
+        callback(false)
+      } else {
+        var sql =
+        'insert into `storage` (`type`,`demensions`,`date`,`time`,`price`,`note`,`reporter`) values (?,?,?,?,?,?,?)'
+        var sql2 =
+        'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)'
+        var sql3 = 'insert into `storage_image` (`path`, `storage_id`) values(?,?)'
+        DBEntity.db.transaction(function (tx) {
+          tx.executeSql(
+            sql,
+            [
+              obj.type,
+              obj.demensions,
+              obj.date,
+              obj.time,
+              obj.price,
+              obj.note,
+              obj.reporter
+            ],
+            function (trx, rs) {
+              console.log('storage insert successful')
+              var storage_id = rs.insertId
+              if ((obj.features != null || obj.features != undefined) && storage_id != null) {
+                for (var i = 0; i < obj.features.length; i++) {
+                  trx.executeSql(
+                    sql2,
+                    [obj.features[i].feature, storage_id, obj.features[i].isCustom],
+                    function (tx2, rs2) {
+                      console.log('storage feature insert successful')
+                    },
+                    DBEntity.printDbError
+                  )
+                }
+              }
+              if ((obj.images != null || obj.images != undefined) && storage_id != null) {
+                for (var i = 0; i < obj.images.length; i++) {
+                  trx.executeSql(
+                    sql3,
+                    [obj.images[i], storage_id],
+                    function (tx2, rs2) {
+                      console.log('Storage image insert successful')
+                    },
+                    DBEntity.printDbError
+                  )
+                }
+              }
+            },
+            DBEntity.printDbError
+          )
+        })
+        callback(true)
+      }
     })
   },
   getStorageList: function (callback) {
@@ -374,6 +381,19 @@ var DBEntity = {
           callback()
         })
       })
+    })
+  },
+  checkDuplicatie: function (model, callback) {
+    if (DBEntity.db === null) { DBEntity.connect() }
+    DBEntity.db.transaction(function (tr) {
+      var sql = 'select count(*) as rows from `storage` where `type` = ? and `demensions` = ? and `date` = ? and `time` = ? and `price` = ? and `note` = ? and `reporter` = ?'
+      tr.executeSql(sql, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter], (trx, rs) => {
+        if (rs.rows.length > 0 && rs.rows.item(0).rows) {
+          callback(true)
+        }else {
+          callback(false)
+        }
+      }, DBEntity.printDbError)
     })
   }
 }
