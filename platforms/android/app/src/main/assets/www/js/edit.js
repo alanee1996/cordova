@@ -33,7 +33,7 @@ var editFunction = {
         $('#delete_img').removeClass('hide')
       }
     }
-    if ($('#other').prop('checked')) { 
+    if ($('#other').prop('checked')) {
       $('#custom-other-container').removeClass('hide')
     }
     $('#other').change(function () {
@@ -48,24 +48,28 @@ var editFunction = {
       var options = {
         date: new Date(),
         mode: 'time',
-        is24Hour: true
+        is24Hour: true,
+        minDate: Date.parse(new Date())
       }
       datePicker.show(options, (d) => {
         // $('#time').blur()
         $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
-      }, (e) => alert(e))
+      }, (e) => {
+      })
     })
     $('#date_container').click(function () {
       // $('#date').blur()
       var options = {
         date: new Date(),
         mode: 'date',
-        minDate: new Date()
+        minDate: Date.parse(new Date()),
+        maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
       }
       datePicker.show(options, (d) => {
         // $('#date').blur()
         $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
-      }, (e) => alert(e))
+      }, (e) => {
+      })
     })
     $('#openCam').click(function (e) {
       e.preventDefault()
