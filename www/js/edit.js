@@ -157,10 +157,10 @@ var editFunction = {
   demensionKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
-      e.target.setCustomValidity('Minimum demensions is 500')
+      e.target.setCustomValidity('Minimum demensions is 1.3')
     }
     else if (validity.rangeOverflow === true) {
-      e.target.setCustomValidity('Maximum demensions is 8000')
+      e.target.setCustomValidity('Maximum demensions is 20')
     }
     else if (validity.valueMissing === true) {
       e.target.setCustomValidity('Please enter demensions')
@@ -171,10 +171,10 @@ var editFunction = {
   priceKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
-      e.target.setCustomValidity('Minimum price is 100')
+      e.target.setCustomValidity('Minimum price is 800')
     }
     else if (validity.rangeOverflow === true) {
-      e.target.setCustomValidity('Maximum price is 900')
+      e.target.setCustomValidity('Maximum price is 3000')
     }
     else if (validity.valueMissing === true) {
       e.target.setCustomValidity('Please enter price')

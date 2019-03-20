@@ -26,11 +26,13 @@ var profileFunction = {
   formSubmit: function (e) {
     var model = {email: $('#p_email').val(),password: $('#p_password').val(),path: $('#img_path_profile').text()}
     DBEntity.updateUser(model, () => {
-      var r = confirm('User profile updated')
-      if (document.getElementById('home.html')) {
-        document.getElementById('home.html').remove()
-      }
-      route.home({}, homeFunction.init)
+      alert('User profile updated')
+      setTimeout(() => {
+        if (document.getElementById('home.html')) {
+          document.getElementById('home.html').remove()
+        }
+        route.home({}, homeFunction.init)
+      }, 3000)
     })
     e.preventDefault()
   }

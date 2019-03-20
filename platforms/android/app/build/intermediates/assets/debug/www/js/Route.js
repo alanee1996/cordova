@@ -3,8 +3,10 @@ function getDrawerAndNav (title) {
     title = 'Mystorage'
   }
   var user = loginFunction.getCurrenyUser()
-  $('.drawer').load('drawer.html', function () { 
-    $('#d_profile_image').attr('src', user.path)
+  $('.drawer').load('drawer.html', function () {
+    if (user.path) {
+      $('#d_profile_image').attr('src', user.path)
+    }
     $('#email').text(user.email)
   })
   $('.nav').load('nav.html', function () {
@@ -86,12 +88,20 @@ var route = {
       callback(obj)
     })
   },
-  profile: function (data, callback) { 
+  profile: function (data, callback) {
     if (data == null) {
       data = {}
     }
     openPage('profile', data, function (obj) {
       getNavBack(obj.title)
+      callback(obj)
+    })
+  },
+  register: function (data, callback) {
+    if (data == null) {
+      data = {}
+    }
+    openPage('register', data, function (obj) {
       callback(obj)
     })
   }

@@ -369,18 +369,20 @@ var DBEntity = {
       if (model.path) {
         sql += ', `path` = ?'
         params[params.length] = model.path
-        if (user.path !== 'img/alanee.jpg' && user.path !== model.path) {
+        if (user.path !== null && user.path !== 'img/no-image.jpg' && user.path !== model.path) {
           camera.delete(user.path, () => {
             console.log('previous profile image delete')
           })
         }
       }
+      params[params.length] = user.id
+      sql += ' where `id` = ?'
       tr.executeSql(sql , params, (trx, rs) => {
         trx.executeSql('select * from `user` where `id` = ?', [user.id], (trx2, rs2) => {
           sessionStorage.setItem('user', JSON.stringify(rs2.rows.item(0)))
           callback()
         })
-      })
+      },DBEntity.printDbError)
     })
   },
   checkDuplicatie: function (model, callback) {
@@ -392,6 +394,23 @@ var DBEntity = {
           callback(true)
         }else {
           callback(false)
+        }
+      }, DBEntity.printDbError)
+    })
+  },
+  createUser: function (model, callback) {
+    if (DBEntity.db === null) { DBEntity.connect() }
+    var sql = 'select count(*) as rows from `user` where `email` = ?'
+    var sql2 = 'insert into `user` (`email`,`password`) values (?,?)'
+    DBEntity.db.transaction(function (tr) {
+      // check user exist or not if exist return error message
+      tr.executeSql(sql, [model.email], (trx, rs) => {
+        if (rs.rows.length > 0 && rs.rows.item(0).rows > 0) {
+          callback(false)
+        } else {
+          trx.executeSql(sql2, [model.email, model.password], (trx2, rs2) => {
+            callback(true)
+          }, DBEntity.printDbError)
         }
       }, DBEntity.printDbError)
     })
