@@ -278,6 +278,9 @@ var DBEntity = {
     DBEntity.db.transaction(function (tx) {
       tx.executeSql('drop table `storage` ', [], (t, rs) => console.log('storage drop'), DBEntity.printDbError)
     })
+    DBEntity.db.transaction(function (tx) {
+      tx.executeSql('drop table `user` ', [], (t, rs) => console.log('user drop'), DBEntity.printDbError)
+    })
   },
   updateStorage: function (model, callback) {
     if (DBEntity.db === null) { DBEntity.connect() }
@@ -369,7 +372,7 @@ var DBEntity = {
       if (model.path) {
         sql += ', `path` = ?'
         params[params.length] = model.path
-        if (user.path !== null && user.path !== 'img/no-image.jpg' && user.path !== model.path) {
+        if (user.path !== null && user.path !== 'img/no-image.jpg' && user.path !== 'img/alanee.jpg' && user.path !== model.path) {
           camera.delete(user.path, () => {
             console.log('previous profile image delete')
           })

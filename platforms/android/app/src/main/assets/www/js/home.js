@@ -15,6 +15,9 @@ var homeFunction = {
     if (document.getElementById('profile.html')) {
       document.getElementById('profile.html').remove()
     }
+    if (document.getElementById('register.html')) {
+      document.getElementById('register.html').remove()
+    }
 
     var search = document.getElementById('search')
     search.addEventListener('keyup', function (e) {
@@ -79,8 +82,8 @@ var homeFunction = {
           storageItem.find('img').attr('src', value.images[0].path).attr('onclick', 'browseImage(' + '"' + value.images[0].path + '"' + ')')
         }
         storageItem.find('.storage-type').text('Storage type: ' + value.type)
-        storageItem.find('.demensions').text('Demensions: ' + value.demensions)
-        storageItem.find('.price').text('Price ' + value.price)
+        storageItem.find('.demensions').text('Demensions: ' + value.demensions + 'm²')
+        storageItem.find('.price').text('RM ' + value.price)
         storageItem.find('.reporter').text('Reporter: ' + value.reporter)
         storageItem.find('.note').text(value.note)
         storageItem.find('.edit').attr('onclick', 'homeFunction.edit(' + JSON.stringify(value) + ')')

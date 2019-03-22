@@ -40,13 +40,13 @@
                     </label>
                     <div class="space"></div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-50">
                             <div class="left">
                                 <input class="blue" name="storageFeature[]" type="checkbox" value="private space"/>
                             </div>
                             <h2>Private Space</h2>
                         </div>
-                        <div class="col">
+                        <div class="col-50">
                             <div class="left">
                                 <input class="blue" name="storageFeature[]" type="checkbox" value="cctv"/>
                             </div>
@@ -54,13 +54,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-50">
                             <div class="left">
                                 <input class="blue" name="storageFeature[]" type="checkbox" value="sharing space"/>
                             </div>
                             <h2>Sharing Space</h2>
                         </div>
-                        <div class="col">
+                        <div class="col-50">
                             <div class="left">
                                 <input class="blue" id="other" name="storageFeature[]" type="checkbox" value="others"/>
                             </div>
@@ -76,7 +76,7 @@
                     <label>Name of reporter
                         <i class="font-red">*</i>
                     </label>
-                    <input id="reporter" name="reporter" required type="text"/>
+                    <input id="reporter" name="reporter" required type="text" maxlength="15"/>
                 </div>
                 <div class="item label-float">
                     <label>Monthly rent price
@@ -85,7 +85,7 @@
                     <input id="price" max="3000" min="800" name="price" onkeyup="createFunction.priceKeyUp(event)" required type="number" step=".01"></div>
                     <div class="item label-float">
                         <label>Notes</label>
-                        <textarea id="note" name="note" rows="5"></textarea>
+                        <textarea id="note" name="note" rows="5" maxlength="50"></textarea>
                     </div>
                     <div class="item no-border">
                         <img class="hide" id="timage"/>
