@@ -2,10 +2,11 @@ var editFunction = {
   obj: null,
   init: function (obj) {
     if (!obj.model) {
-      editFunction.obj = obj
+      editFunction.obj = obj // cahce the obj for reuse purpose
       $('#storage-update-form').addClass('hide')
       alert('The data missing during passing from previous page')
     } else {
+      // data binding
       $('#storageId').text(obj.model.id)
       $('#storageType').val(obj.model.type)
       $('#demensions').val(obj.model.demensions)
@@ -33,6 +34,7 @@ var editFunction = {
         $('#delete_img').removeClass('hide')
       }
     }
+    // show the "other" input field when "other" checkbox is checked
     if ($('#other').prop('checked')) {
       $('#custom-other-container').removeClass('hide')
     }
@@ -43,6 +45,7 @@ var editFunction = {
         $('#custom-other-container').addClass('hide')
       }
     })
+    // init time picker
     $('#time_container').click(function () {
       $('#time').blur()
       var options = {
@@ -52,13 +55,13 @@ var editFunction = {
         minDate: Date.parse(new Date())
       }
       datePicker.show(options, (d) => {
-        // $('#time').blur()
         $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
       }, (e) => {
       })
     })
+    // init date picker
     $('#date_container').click(function () {
-      // $('#date').blur()
+      $('#date').blur()
       var options = {
         date: new Date(),
         mode: 'date',
@@ -66,11 +69,11 @@ var editFunction = {
         maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
       }
       datePicker.show(options, (d) => {
-        // $('#date').blur()
         $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
       }, (e) => {
       })
     })
+    // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()
       camera.openCamera((imagePath) => {
@@ -82,6 +85,7 @@ var editFunction = {
         })
       })
     })
+    // delete image
     $('#delete_img').click(function (e) {
       e.preventDefault()
       if ($('#imagepath').text()) {
@@ -99,6 +103,7 @@ var editFunction = {
         }
       }
     })
+    // init form submission
     $('#storage-update-form').submit(editFunction.formSubmit)
   },
   formSubmit: function (e) {
@@ -131,6 +136,7 @@ var editFunction = {
       alert(e.message)
     }
   },
+  // get the select storage feature and return as an array
   getFeatures: function (elements) {
     var features = []
     $.each(elements, function (key, element) {
@@ -144,6 +150,7 @@ var editFunction = {
     return features
   },
   validation: function (e) {
+    // check checkbox at least select one
     var element = e.target
     var count = 0
     $(element).find('input[name="storageFeature[]"]').each(function (key, value) {
@@ -154,6 +161,7 @@ var editFunction = {
     if (count == 0) throw new Error('Please at least choose one storage feature')
     if ($('#other').prop('checked') && $('#custom-other').val() == '') throw new Error('Please enter other storage features')
   },
+  // make sure the error message in specific
   demensionKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
@@ -168,6 +176,7 @@ var editFunction = {
       e.target.setCustomValidity('')
     }
   },
+  // make sure the error message in specific
   priceKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
@@ -182,6 +191,7 @@ var editFunction = {
       e.target.setCustomValidity('')
     }
   },
+  // get the taken image path from the html element
   getImagePath: function () {
     if ($('#imagepath').text()) {
       return [$('#imagepath').text()]
