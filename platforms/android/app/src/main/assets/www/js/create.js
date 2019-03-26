@@ -1,37 +1,34 @@
 var createFunction = {
   init: function (obj) {
-    // if (document.getElementById('home.html')) {
-    //   document.getElementById('home.html').remove()
-    // }
+    // init the time picker
     $('#time_container').click(function () {
       $('#time').blur()
       var options = {
         date: new Date(),
         mode: 'time',
         is24Hour: true,
-        minDate: Date.parse(new Date()),
+        minDate: Date.parse(new Date())
       }
       datePicker.show(options, (d) => {
-        // $('#time').blur()
         $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
       }, (e) => {
       })
     })
+    // init date picker
     $('#date_container').click(function () {
-      // $('#date').blur()
+      $('#date').blur()
       var options = {
         date: new Date(),
         mode: 'date',
         minDate: Date.parse(new Date()),
-        maxDate: Date.parse(moment(new Date().getFullYear() + 1,'YYYY').format('DD-MM-YYYY'))
+        maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
       }
       datePicker.show(options, (d) => {
-        // $('#date').blur()
         $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
       }, (e) => {
       })
     })
-
+    // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()
       camera.openCamera((imagePath) => {
@@ -43,6 +40,7 @@ var createFunction = {
         })
       })
     })
+    // show the "other" input field when "other" checkbox is checked
     $('#other').change(function () {
       if ($('#other').prop('checked')) {
         $('#custom-other-container').removeClass('hide')
@@ -50,7 +48,7 @@ var createFunction = {
         $('#custom-other-container').addClass('hide')
       }
     })
-
+    // delete image
     $('#delete_img').click(function (e) {
       e.preventDefault()
       if ($('#imagepath').text()) {
@@ -66,9 +64,10 @@ var createFunction = {
         }
       }
     })
-
+    // init form submission
     $('#storage-create-form').submit(createFunction.formSubmit)
   },
+  //get the select storage feature and return as an array
   getFeatures: function (elements) {
     var features = []
     $.each(elements, function (key, element) {
@@ -84,6 +83,7 @@ var createFunction = {
   formSubmit: function (e) {
     e.preventDefault()
     try {
+      //validation
       createFunction.validation(e)
       obj = {}
       obj.type = e.target.storageType.value
@@ -107,6 +107,7 @@ var createFunction = {
   validation: function (e) {
     var element = e.target
     var count = 0
+    //check checkbox at least select one
     $(element).find('input[name="storageFeature[]"]').each(function (key, value) {
       if ($(value).prop('checked') === true) {
         count++
@@ -115,6 +116,7 @@ var createFunction = {
     if (count == 0) throw new Error('Please at least choose one storage feature')
     if ($('#other').prop('checked') && $('#custom-other').val() == '') throw new Error('Please enter other storage features')
   },
+  //make sure the error message in specific
   demensionKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
@@ -129,6 +131,7 @@ var createFunction = {
       e.target.setCustomValidity('')
     }
   },
+    //make sure the error message in specific
   priceKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
@@ -143,6 +146,7 @@ var createFunction = {
       e.target.setCustomValidity('')
     }
   },
+  //get the taken image path from the html element
   getImagePath: function () {
     if ($('#imagepath').text()) {
       return [$('#imagepath').text()]

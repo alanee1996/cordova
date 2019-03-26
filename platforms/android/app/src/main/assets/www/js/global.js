@@ -1,4 +1,5 @@
-function where (obj, predicate) {
+//find object from array and return it
+function where(obj, predicate) {
   if (obj instanceof Array) {
     for (var i = 0; i < obj.length; i++) {
       var result = predicate(obj[i])
@@ -10,7 +11,7 @@ function where (obj, predicate) {
   }
   throw new Error('Where function accept only array')
 }
-
+//find object from array and return it's index
 function whereIndex (obj, predicate) {
   if (obj instanceof Array) {
     for (var i = 0; i < obj.length; i++) {

@@ -1,5 +1,5 @@
 var DBEntity = {
-  db: null,
+  db: null, //db instance
   config: {
     name: 'mystorage.db',
     location: 'default'
@@ -9,6 +9,7 @@ var DBEntity = {
       console.log('ECHO test OK')
     })
   },
+  //init db instance
   connect: function () {
     DBEntity.db = window.sqlitePlugin.openDatabase(
       DBEntity.config,
@@ -16,6 +17,7 @@ var DBEntity = {
       DBEntity.printDbError
     )
   },
+  //create database and tables
   checkTables: function () {
     if (DBEntity.db == null) {
       DBEntity.connect()
@@ -75,6 +77,7 @@ var DBEntity = {
         },
         DBEntity.printDbError
       )
+      //insert default user
       tx.executeSql(
         sql4,
         [],
@@ -95,10 +98,12 @@ var DBEntity = {
       )
     })
   },
+  //insert new storage item
   createStorage: function (obj, callback) {
     if (DBEntity == null) {
       DBEntity.connect()
     }
+    //check duplicate storage item
     DBEntity.checkDuplicatie(obj, (condition) => {
       if (condition) {
         callback(false)
@@ -108,6 +113,7 @@ var DBEntity = {
         var sql2 =
         'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)'
         var sql3 = 'insert into `storage_image` (`path`, `storage_id`) values(?,?)'
+        //inser storage
         DBEntity.db.transaction(function (tx) {
           tx.executeSql(
             sql,
@@ -125,6 +131,7 @@ var DBEntity = {
               var storage_id = rs.insertId
               if ((obj.features != null || obj.features != undefined) && storage_id != null) {
                 for (var i = 0; i < obj.features.length; i++) {
+                  //insert features
                   trx.executeSql(
                     sql2,
                     [obj.features[i].feature, storage_id, obj.features[i].isCustom],
@@ -137,6 +144,7 @@ var DBEntity = {
               }
               if ((obj.images != null || obj.images != undefined) && storage_id != null) {
                 for (var i = 0; i < obj.images.length; i++) {
+                  //insert storage images
                   trx.executeSql(
                     sql3,
                     [obj.images[i], storage_id],
@@ -151,16 +159,18 @@ var DBEntity = {
             DBEntity.printDbError
           )
         })
-        callback(true)
+        callback(true) // trigger callback function
       }
     })
   },
+  //get a complete bind model from database including storage,features and images
   getStorageList: function (callback) {
     if (DBEntity.db == null) {
       DBEntity.connect()
     }
     DBEntity.db.transaction(function (tx) {
       var model = []
+      //select storage first
       tx.executeSql(
         'select * from `storage` order by `id` DESC',
         [],
@@ -168,11 +178,11 @@ var DBEntity = {
           console.log('data is selecting')
           for (var i = 0; i < rs.rows.length; i++) {
             var target = rs.rows.item(i)
-            target.images = []
-            target.features = []
+            target.images = [] //init object
+            target.features = [] //init object
             model.push(target)
           }
-          DBEntity.getStorageImages(model, callback)
+          DBEntity.getStorageImages(model, callback) //select storage image
         },
         DBEntity.printDbError
       )
@@ -196,15 +206,17 @@ var DBEntity = {
             target.features = []
             model.push(target)
           }
-          DBEntity.getStorageImages(model, callback)
+          DBEntity.getStorageImages(model, callback) //select storage image
         },
         DBEntity.printDbError
       )
     })
   },
   getStorageImages: function (model, callback) {
-    if (model != null && model.length > 0) {
-      var start = model[model.length - 1].id
+    if (model != null && model.length > 0) { //ignore when storage is equal to null
+      //start and end variable is to make sure querying one time to get multiple result in between the id range reduce repeating calling database
+      //because of the sorting of the storage is descending order, so the starting id is the last index from the array.
+      var start = model[model.length - 1].id 
       var end = model[0].id
       var sql = start === end ? 'select * from `storage_image` where `storage_id` = ?' : 'select * from `storage_image` where `storage_id` between ? and ?'
       var params = start === end ? [start] : [start, end]
@@ -214,19 +226,21 @@ var DBEntity = {
             var storageId = rs.rows.item(x).storage_id
             var modelIndex = whereIndex(model, (c) => c.id === storageId)
             if (modelIndex != null) {
-              model[modelIndex].images.push(rs.rows.item(x))
+              model[modelIndex].images.push(rs.rows.item(x))// add single image object to array list
             }
           }
           console.log(model)
-          DBEntity.getStorageFeatures(model, callback)
+          DBEntity.getStorageFeatures(model, callback) //binding storage features
         }, DBEntity.printDbError)
       })
     } else {
-      DBEntity.getStorageFeatures(model, callback)
+      DBEntity.getStorageFeatures(model, callback) //binding storage features
     }
   },
   getStorageFeatures: function (model, callback) {
-    if (model != null && model.length > 0) {
+    if (model != null && model.length > 0) {//ignore when storage is equal to null
+      //start and end variable is to make sure querying one time to get multiple result in between the id range reduce repeating calling database
+      //because of the sorting of the storage is descending order, so the starting id is the last index from the array.
       var start = model[model.length - 1].id
       var end = model[0].id
       var sql = start === end ? 'select * from `storage_feature` where `storage_id` = ?' : 'select * from `storage_feature` where `storage_id` between ? and ?'
@@ -237,18 +251,19 @@ var DBEntity = {
             var storageId = rs.rows.item(y).storage_id
             var modelIndex = whereIndex(model, (c) => c.id === storageId)
             if (modelIndex != null) {
-              model[modelIndex].features.push(rs.rows.item(y))
+              model[modelIndex].features.push(rs.rows.item(y))// add single feature object to array list
             }
           }
-          callback(model)
+          callback(model)// trigger the final callback to return the object
         }, DBEntity.printDbError)
       })
     }else {
-      callback(model)
+      callback(model)// trigger the final callback to return the object
     }
   },
   deleteImage: function (id, callback) {
     if (DBEntity.db == null) { DBEntity.connect }
+    //delete image from database
     DBEntity.db.transaction(function (tx) {
       var sql = 'delete from `storage_image` where `id` = ?'
       tx.executeSql(sql, [id], function (trx, rs) {
@@ -265,6 +280,7 @@ var DBEntity = {
     )
     return error
   },
+  //reset database
   flash: function () {
     if (DBEntity == null) {
       DBEntity.connect()
@@ -324,14 +340,16 @@ var DBEntity = {
   },
   deleteStorage: function (model, callback) {
     if (DBEntity.db == null) { DBEntity.connect() }
+    //delete sub table data storage images 
     DBEntity.db.transaction(function (tr) {
       if (model.images && model.images.length > 0) {
         $.each(model.images, (key, value) => {
           camera.delete(value.path, function (result) {
-            DBEntity.deleteImage(value.id)
+            DBEntity.deleteImage(value.id)//delete the actually image from the mobile storage
           })
         })
       }
+      //delete sub table data storage features
       if (model.features && model.features.length > 0) {
         $.each(model.features, (key, value) => {
           tr.executeSql('delete from `storage_feature` where `storage_id` = ?', [model.id], (trx, rs) => {
@@ -339,6 +357,7 @@ var DBEntity = {
           })
         })
       }
+      //delete the storage item
       tr.executeSql('delete from `storage` where `id` = ?', [model.id], (trx, rs) => {
         console.log('storage delete successful')
         callback()
@@ -361,7 +380,7 @@ var DBEntity = {
   },
   updateUser: function (model, callback) {
     if (DBEntity.db === null) { DBEntity.connect() }
-    var user = JSON.parse(sessionStorage.getItem('user'))
+    var user = JSON.parse(sessionStorage.getItem('user')) //covnert the obj to json string and keep in the session storage
     DBEntity.db.transaction(function (tr) {
       var sql = 'update user set `email` = ? '
       var params = [model.email]
@@ -369,9 +388,11 @@ var DBEntity = {
         sql += ', `password` = ?'
         params[params.length] = model.password
       }
+      //if else statement to check the nullable child table in order to avoid error when no result
       if (model.path) {
         sql += ', `path` = ?'
         params[params.length] = model.path
+        //if the image path equal to the img/no-image.jpg or img/alanee.jpg, delete database only because the actual file is storage in www folder
         if (user.path !== null && user.path !== 'img/no-image.jpg' && user.path !== 'img/alanee.jpg' && user.path !== model.path) {
           camera.delete(user.path, () => {
             console.log('previous profile image delete')
@@ -388,6 +409,7 @@ var DBEntity = {
       },DBEntity.printDbError)
     })
   },
+  //checking duplicate storage item
   checkDuplicatie: function (model, callback) {
     if (DBEntity.db === null) { DBEntity.connect() }
     DBEntity.db.transaction(function (tr) {
@@ -401,6 +423,7 @@ var DBEntity = {
       }, DBEntity.printDbError)
     })
   },
+  //user registration
   createUser: function (model, callback) {
     if (DBEntity.db === null) { DBEntity.connect() }
     var sql = 'select count(*) as rows from `user` where `email` = ?'

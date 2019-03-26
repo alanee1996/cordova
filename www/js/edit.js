@@ -2,10 +2,10 @@ var editFunction = {
   obj: null,
   init: function (obj) {
     if (!obj.model) {
-      editFunction.obj = obj // cahce the obj for reuse purpose
       $('#storage-update-form').addClass('hide')
       alert('The data missing during passing from previous page')
     } else {
+      editFunction.obj = obj.model // cahce the obj for reuse purpose
       // data binding
       $('#storageId').text(obj.model.id)
       $('#storageType').val(obj.model.type)
@@ -120,7 +120,15 @@ var editFunction = {
       obj.note = e.target.note.value
       obj.reporter = e.target.reporter.value
       obj.features = editFunction.getFeatures($(e.target).find('input[name="storageFeature[]"]'))
-      obj.images = editFunction.getImagePath()
+      var imgPath = editFunction.getImagePath()
+      if ( (editFunction.obj.images.length === 0 && imgPath.length !== 0)) {
+        obj.images = imgPath
+      }
+      else if (imgPath.length > 0 && editFunction.obj.images.length > 0) {
+        if (imgPath[0] !== editFunction.obj.images[0].path) {
+          obj.images = imgPath
+        }
+      }
       loading('updating storage')
       db.updateStorage(obj, () => {
         if (document.getElementById('home.html')) {

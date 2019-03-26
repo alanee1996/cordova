@@ -1,4 +1,5 @@
-function getDrawerAndNav (title) {
+//auto injet the header and drawer for the target page
+function getDrawerAndNav(title) {
   if (title == null || title == undefined) {
     title = 'Mystorage'
   }
@@ -13,7 +14,7 @@ function getDrawerAndNav (title) {
     $('.page-title').append(title)
   })
 }
-
+//auto injet the header and with back page button
 function getNavBack (title) {
   if (title == null || title == undefined) {
     title = 'Mystorage'
@@ -22,7 +23,7 @@ function getNavBack (title) {
     $('.page-title-back').append(title)
   })
 }
-
+//router for page redirection
 var route = {
   login: function (data, callback) {
     if (data === null) {

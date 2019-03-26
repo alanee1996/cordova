@@ -14,7 +14,6 @@ var app = {
     db = DBEntity
     db.test()
     db.checkTables()
-    // route.profile({},profileFunction.init)
     if (sessionStorage.getItem('user')) {
       route.home({}, homeFunction.init)
     } else {

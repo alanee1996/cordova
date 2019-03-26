@@ -1,5 +1,6 @@
 var homeFunction = {
   init: function (obj) {
+    // remove the cache pages to avoid id conflict
     if (document.getElementById('login.html')) {
       document.getElementById('login.html').remove()
     }
@@ -18,7 +19,7 @@ var homeFunction = {
     if (document.getElementById('register.html')) {
       document.getElementById('register.html').remove()
     }
-
+    // trigger the search function when user click enter
     var search = document.getElementById('search')
     search.addEventListener('keyup', function (e) {
       if (e.keyCode === 13) {
@@ -64,7 +65,7 @@ var homeFunction = {
         search.blur()
       })
     })
-    homeFunction.getStorageData()
+    homeFunction.getStorageData() //init data list
   },
   getStorageData: function () {
     db.getStorageList(homeFunction.buildStorageList)

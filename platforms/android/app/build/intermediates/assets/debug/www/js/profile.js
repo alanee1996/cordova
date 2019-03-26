@@ -1,6 +1,7 @@
 var profileFunction = {
   init: function (obj) {
     var user = loginFunction.getCurrenyUser()
+    //data binding
     if (user) {
       if (user.path) {
         $('#p_profile_image').attr('src', user.path)
@@ -23,6 +24,7 @@ var profileFunction = {
       route.login({}, loginFunction.init)
     }
   },
+  //update user detail
   formSubmit: function (e) {
     var model = {email: $('#p_email').val(),password: $('#p_password').val(),path: $('#img_path_profile').text()}
     DBEntity.updateUser(model, () => {
