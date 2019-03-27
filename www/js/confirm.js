@@ -1,4 +1,7 @@
+//this confrimFunction can assume as confirm class
+//this method will trigger when confirm page is loaded
 var confrimFunction = {
+  //this is a constructor of the confirmFunction
   init: function (obj) {
     //data binding
     var container = $('#confirm_storage_item')
@@ -28,17 +31,16 @@ var confrimFunction = {
     $('#confirm_btn').click(function () {
       loading('Creating storage')
       //insert storage data to db
-      db.createStorage(obj.model, (condition) => {
+      db.createStorage(obj.model, function (condition) {
         if (condition) {
-          setTimeout(() => {
-            closeLoading()
-            //remove home page from the cache of mobileui in order to make the page refresh when landed
-            if (document.getElementById('home.html')) {
-              document.getElementById('home.html').remove()
-            }
-            route.home({}, homeFunction.init)
-          }, 3000)
-        }else {
+          closeLoading()
+          //remove home page from the cache of mobileui in order to make the page refresh when landed
+          if (document.getElementById('home.html')) {
+            document.getElementById('home.html').remove()
+          }
+          route.home({}, homeFunction.init)
+        } else {
+          closeLoading()
           alert('The storage item is duplicate in the database')
         }
       })

@@ -1,5 +1,8 @@
+// this function can assumed as a class for editStorage page
+//this function trigger when editStorage page loaded
 var editFunction = {
-  obj: null,
+  obj: null, //to cahce the object from the route
+  //this is an constructor
   init: function (obj) {
     if (!obj.model) {
       $('#storage-update-form').addClass('hide')
@@ -13,7 +16,7 @@ var editFunction = {
       $('#time').val(obj.model.time)
       $('#date').val(obj.model.date)
       $('#price').val(obj.model.price)
-      $.each(obj.model.features, (key, value) => {
+      $.each(obj.model.features, function (key, value) {
         if ($('input[value="' + value.feature + '"][type="checkbox"]').length > 0) {
           $('input[value="' + value.feature + '"][type="checkbox"]').prop('checked', true)
         }else {
@@ -54,9 +57,9 @@ var editFunction = {
         is24Hour: true,
         minDate: Date.parse(new Date())
       }
-      datePicker.show(options, (d) => {
+      datePicker.show(options, function (d) {
         $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
-      }, (e) => {
+      }, function (e) {
       })
     })
     // init date picker
@@ -68,19 +71,19 @@ var editFunction = {
         minDate: Date.parse(new Date()),
         maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
       }
-      datePicker.show(options, (d) => {
+      datePicker.show(options, function (d) {
         $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
-      }, (e) => {
+      }, function (e) {
       })
     })
     // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()
-      camera.openCamera((imagePath) => {
+      camera.openCamera(function (imagePath) {
         $('#openCam').addClass('hide')
         $('#delete_img').removeClass('hide')
         $('#timage').attr('src', imagePath).removeClass('hide')
-        camera.savePhoto(imagePath, (retrivedImage) => {
+        camera.savePhoto(imagePath, function (retrivedImage) {
           $('#imagepath').text(retrivedImage.nativeURL)
         })
       })
@@ -91,8 +94,8 @@ var editFunction = {
       if ($('#imagepath').text()) {
         var r = confirm('Are you sure you want to delete this image?')
         if (r) {
-          db.deleteImage(obj.model.id, (rs) => {
-            camera.delete($('#imagepath').text(), () => {
+          db.deleteImage(obj.model.id, function (rs) {
+            camera.delete($('#imagepath').text(), function () {
               // remove image
               $('#delete_img').addClass('hide')
               $('#openCam').removeClass('hide')
@@ -109,7 +112,7 @@ var editFunction = {
   formSubmit: function (e) {
     e.preventDefault()
     try {
-      editFunction.validation(e)
+      //editFunction.validation(e)
       obj = {}
       obj.id = $('#storageId').text()
       obj.type = e.target.storageType.value
@@ -130,15 +133,13 @@ var editFunction = {
         }
       }
       loading('updating storage')
-      db.updateStorage(obj, () => {
+      db.updateStorage(obj, function () {
         if (document.getElementById('home.html')) {
           document.getElementById('home.html').remove()
         }
         console.log('Update successful')
-        setTimeout(() => {
-          closeLoading()
-          route.home({}, homeFunction.init)
-        }, 3000)
+        closeLoading()
+        route.home({}, homeFunction.init)
       })
     } catch(e) {
       alert(e.message)

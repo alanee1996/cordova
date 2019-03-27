@@ -1,4 +1,7 @@
+//this function can assume as a class for register page
+//this function triggered when the register page loaded
 var registerFunction = {
+  //this is a constructor
   init: function (obj) {
     $('#registerForm').submit(function (e) {
       if ($('#register_password').val() === $('#confrim_password').val()) {
@@ -6,9 +9,9 @@ var registerFunction = {
           email: $('#register_email').val(),
           password: $('#register_password').val()
         }
-        db.createUser(model, (condition) => {
+        db.createUser(model, function (condition) {
           if (condition) {
-            DBEntity.selectUser(model, (m) => {
+            DBEntity.selectUser(model, function (m) {
               if (m === null) {
                 alert('Something went wrong cannot auto login')
               } else {

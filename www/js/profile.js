@@ -1,7 +1,9 @@
+// this function can assume as a class for the profile page
+// this function triggered when the profile page is loaded
 var profileFunction = {
   init: function (obj) {
     var user = loginFunction.getCurrenyUser()
-    //data binding
+    // data binding
     if (user) {
       if (user.path) {
         $('#p_profile_image').attr('src', user.path)
@@ -12,8 +14,8 @@ var profileFunction = {
         openPopover('popoverImg')
       })
       $('#changeImage').click(function () {
-        camera.openCamera((imagePath) => {
-          camera.savePhoto(imagePath, (img) => {
+        camera.openCamera(function (imagePath) {
+          camera.savePhoto(imagePath, function (img) {
             $('#img_path_profile').text(img.nativeURL)
             $('#p_profile_image').attr('src', img.nativeURL)
           })
@@ -24,17 +26,15 @@ var profileFunction = {
       route.login({}, loginFunction.init)
     }
   },
-  //update user detail
+  // update user detail
   formSubmit: function (e) {
     var model = {email: $('#p_email').val(),password: $('#p_password').val(),path: $('#img_path_profile').text()}
-    DBEntity.updateUser(model, () => {
+    DBEntity.updateUser(model, function () {
       alert('User profile updated')
-      setTimeout(() => {
-        if (document.getElementById('home.html')) {
-          document.getElementById('home.html').remove()
-        }
-        route.home({}, homeFunction.init)
-      }, 3000)
+      if (document.getElementById('home.html')) {
+        document.getElementById('home.html').remove()
+      }
+      route.home({}, homeFunction.init)
     })
     e.preventDefault()
   }

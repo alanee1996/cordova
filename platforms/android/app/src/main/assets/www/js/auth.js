@@ -1,4 +1,8 @@
+//this is function can assume as login class
+//this method will trigger when login page is loaded
 var loginFunction = {
+  //this is the init function or can assume as constructor
+  //this triggered by the routing callback function
   init: function (obj) {
     //remove the home page cache by the mobile ui to avoid back page
     if (document.getElementById('home.html')) {
@@ -10,7 +14,7 @@ var loginFunction = {
         password: $('#login_password').val()
       }
       //find user from db
-      db.selectUser(model, (m) => {
+      db.selectUser(model, function(m) {
         if (m === null) {
           alert('Bad credential')
         }else {

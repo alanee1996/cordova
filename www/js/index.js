@@ -1,4 +1,4 @@
-var db
+var db//this is the global db instance
 var app = {
   initialize: function () {
     document.addEventListener(
@@ -14,6 +14,7 @@ var app = {
     db = DBEntity
     db.test()
     db.checkTables()
+    //decide what page to go
     if (sessionStorage.getItem('user')) {
       route.home({}, homeFunction.init)
     } else {

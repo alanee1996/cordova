@@ -1,4 +1,7 @@
+// this function can assume as a class for home page
+// this function triggered when the home page is loaded
 var homeFunction = {
+  // this is a constructor
   init: function (obj) {
     // remove the cache pages to avoid id conflict
     if (document.getElementById('login.html')) {
@@ -28,17 +31,19 @@ var homeFunction = {
           value: search.value,
           max: $('#amount').val()
         }
-        db.search(searchValue, (m) => {
-          loading('Searching')
-          setTimeout(() => {
+        db.search(searchValue, function (m) {
+          if (searchValue.value.includes('%')) { 
+            alert('Violated character found from the search box')
+          } else {
+            loading('Searching')
             closeLoading()
             $('#storagelist').children('.storage').remove()
             if (m) {
               homeFunction.buildStorageList(m)
             }else {
               $('#no-result').removeClass('hide')
-            }
-          }, 3000)
+            } 
+          }
           search.blur()
         })
         e.preventDefault()
@@ -51,21 +56,19 @@ var homeFunction = {
         value: $('#search').val(),
         max: $('#amount').val()
       }
-      db.search(searchValue, (m) => {
+      db.search(searchValue, function (m) {
         loading('Filtering')
-        setTimeout(() => {
-          closeLoading()
-          $('#storagelist').children('.storage').remove()
-          if (m) {
-            homeFunction.buildStorageList(m)
-          }else {
-            $('#no-result').removeClass('hide')
-          }
-        }, 2000)
+        $('#storagelist').children('.storage').remove()
+        if (m) {
+          homeFunction.buildStorageList(m)
+        }else {
+          $('#no-result').removeClass('hide')
+        }
+        closeLoading()
         search.blur()
       })
     })
-    homeFunction.getStorageData() //init data list
+    homeFunction.getStorageData() // init data list
   },
   getStorageData: function () {
     db.getStorageList(homeFunction.buildStorageList)
@@ -114,12 +117,10 @@ var homeFunction = {
     var r = confirm('Are you sure want to delete this storage item ?')
     if (r) {
       loading('Deleting the storage item')
-      db.deleteStorage(model, () => {
-        setTimeout(() => {
-          closeLoading()
-          $('#storagelist').children('.storage').remove()
-          homeFunction.getStorageData()
-        }, 3000)
+      db.deleteStorage(model, function () {
+        closeLoading()
+        $('#storagelist').children('.storage').remove()
+        homeFunction.getStorageData()
       })
     }
   }

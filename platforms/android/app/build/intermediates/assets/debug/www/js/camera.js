@@ -1,3 +1,4 @@
+//this is the function list for camera event
 var camera = {
   //reference https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/index.html
   getOptions: function () {
@@ -24,12 +25,12 @@ var camera = {
   //saving photo
   savePhoto: function (imagePath, callback) {
     //get the public directory
-    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, (dirEntry) => {
+    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dirEntry) {
       var stamp = new Date().getTime()
       var filename = stamp + '.jpg'
       var directory = 'myStorage'
       //open the image file
-      window.resolveLocalFileSystemURL(imagePath, (imageEntry) => {
+      window.resolveLocalFileSystemURL(imagePath, function (imageEntry) {
         //move image file to target directory
         dirEntry.getDirectory(directory, { create: true, exclusive: false }, function (dir) {
             imageEntry.moveTo(dir, filename, callback, camera.fileSavingError)
@@ -43,7 +44,7 @@ var camera = {
   //remove image from user mobile storage
   delete: function (imagePath,callback) { 
     console.log(imagePath)
-    window.resolveLocalFileSystemURL(imagePath, (imageEntry) => { 
+    window.resolveLocalFileSystemURL(imagePath, function (imageEntry) { 
       imageEntry.remove(callback,camera.fileSavingError)
     })
   }

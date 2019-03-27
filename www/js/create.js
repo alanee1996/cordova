@@ -1,4 +1,7 @@
+//this function can assume as class for create storage page
+//this function will trigger when createStorage page is loaded
 var createFunction = {
+  //this can assume as a constructor
   init: function (obj) {
     // init the time picker
     $('#time_container').click(function () {
@@ -9,9 +12,9 @@ var createFunction = {
         is24Hour: true,
         minDate: Date.parse(new Date())
       }
-      datePicker.show(options, (d) => {
+      datePicker.show(options, function (d) {
         $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
-      }, (e) => {
+      }, function (e) {
       })
     })
     // init date picker
@@ -23,19 +26,19 @@ var createFunction = {
         minDate: Date.parse(new Date()),
         maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
       }
-      datePicker.show(options, (d) => {
+      datePicker.show(options, function (d) {
         $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
-      }, (e) => {
+      }, function(e) {
       })
     })
     // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()
-      camera.openCamera((imagePath) => {
+      camera.openCamera(function (imagePath) {
         $('#openCam').addClass('hide')
         $('#delete_img').removeClass('hide')
         $('#timage').attr('src', imagePath).removeClass('hide')
-        camera.savePhoto(imagePath, (retrivedImage) => {
+        camera.savePhoto(imagePath, function (retrivedImage) {
           $('#imagepath').text(retrivedImage.nativeURL)
         })
       })
@@ -54,7 +57,7 @@ var createFunction = {
       if ($('#imagepath').text()) {
         var r = confirm('Are you sure you want to delete this image?')
         if (r) {
-          camera.delete($('#imagepath').text(), () => {
+          camera.delete($('#imagepath').text(), function () {
             // remove image
             $('#delete_img').addClass('hide')
             $('#openCam').removeClass('hide')
@@ -84,7 +87,7 @@ var createFunction = {
     e.preventDefault()
     try {
       //validation
-      createFunction.validation(e)
+      //createFunction.validation(e)
       obj = {}
       obj.type = e.target.storageType.value
       obj.demensions = parseFloat(e.target.demensisons.value)
@@ -96,10 +99,8 @@ var createFunction = {
       obj.features = createFunction.getFeatures($(e.target).find('input[name="storageFeature[]"]'))
       obj.images = createFunction.getImagePath()
       loading('Preparing confirm storage page')
-      setTimeout(() => {
         closeLoading()
         route.confirm({model: obj}, confrimFunction.init)
-      }, 3000)
     } catch(e) {
       alert(e.message)
     }

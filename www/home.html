@@ -10,14 +10,19 @@
                 <div class="item icon ion-search">
                     <input id="search" placeholder="Search by type or reporter" type="text"/>
                 </div>
-                <div class="item range">
+                <div class="item range no-border">
                     <div class="left">
                         <i class="icon ion-social-usd"></i>
                     </div>
                     <input id="amount" max="3000" min="800" type="range" value="3000">
-                        <div class="right">
+                        <div class="right" style="padding-top:11px">
                             <p id="max-amount">3000</p>
                         </div>
+                    </div>
+                    <div class="item no-border" id="search-price-label">
+                        <p class="text-grey-500 watermark-date">
+                            The lowest storage price is RM 800 and the highest storage price is RM 3000
+                        </p>
                     </div>
                 </div>
             </div>
@@ -51,12 +56,12 @@
                         <p class="text-grey-500 watermark-date datetime">
                             Created at 01-01-2019 12:56:00 am
                         </p>
-                        <div class="row-between">
+                        <div class="row horizontal-align-right">
                             <div class="col-50"></div>
-                            <div class="col-20">
+                            <div class="mr-10">
                                 <button class="light-blue-900 icon ion-edit big edit"></button>
                             </div>
-                            <div class="col-20">
+                            <div>
                                 <button class="red-800 icon ion-trash-b big delete"></button>
                             </div>
                         </div>

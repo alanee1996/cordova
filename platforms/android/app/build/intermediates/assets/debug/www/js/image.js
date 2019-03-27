@@ -1,3 +1,4 @@
+//this function is for browsing the any image to a new page
 var imageFunction = {
   init: function (obj) {
     console.log(obj)
