@@ -3,34 +3,12 @@
 var createFunction = {
   //this can assume as a constructor
   init: function (obj) {
-    // init the time picker
-    $('#time_container').click(function () {
-      $('#time').blur()
-      var options = {
-        date: new Date(),
-        mode: 'time',
-        is24Hour: true,
-        minDate: Date.parse(new Date())
-      }
-      datePicker.show(options, function (d) {
-        $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
-      }, function (e) {
-      })
-    })
-    // init date picker
-    $('#date_container').click(function () {
-      $('#date').blur()
-      var options = {
-        date: new Date(),
-        mode: 'date',
-        minDate: Date.parse(new Date()),
-        maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
-      }
-      datePicker.show(options, function (d) {
-        $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
-      }, function(e) {
-      })
-    })
+
+    //set minimum date
+    $('#date').attr('min', moment(new Date().getDate() - 7, 'DD').format('YYYY-MM-DD'))
+    //set maximum time
+    $('#date').attr('max',moment(new Date().getFullYear() + 1, 'YYYY').format('YYYY-MM-DD'))
+
     // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()

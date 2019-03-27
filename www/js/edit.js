@@ -1,8 +1,8 @@
 // this function can assumed as a class for editStorage page
-//this function trigger when editStorage page loaded
+// this function trigger when editStorage page loaded
 var editFunction = {
-  obj: null, //to cahce the object from the route
-  //this is an constructor
+  obj: null, // to cahce the object from the route
+  // this is an constructor
   init: function (obj) {
     if (!obj.model) {
       $('#storage-update-form').addClass('hide')
@@ -14,7 +14,7 @@ var editFunction = {
       $('#storageType').val(obj.model.type)
       $('#demensions').val(obj.model.demensions)
       $('#time').val(obj.model.time)
-      $('#date').val(obj.model.date)
+      $('#date').val(moment(obj.model.date, 'DD-MM-YYYY').format('YYYY-MM-DD'))
       $('#price').val(obj.model.price)
       $.each(obj.model.features, function (key, value) {
         if ($('input[value="' + value.feature + '"][type="checkbox"]').length > 0) {
@@ -48,34 +48,10 @@ var editFunction = {
         $('#custom-other-container').addClass('hide')
       }
     })
-    // init time picker
-    $('#time_container').click(function () {
-      $('#time').blur()
-      var options = {
-        date: new Date(),
-        mode: 'time',
-        is24Hour: true,
-        minDate: Date.parse(new Date())
-      }
-      datePicker.show(options, function (d) {
-        $('#time').val(moment(d, 'HH:mm:ss').format('HH:mm:ss'))
-      }, function (e) {
-      })
-    })
-    // init date picker
-    $('#date_container').click(function () {
-      $('#date').blur()
-      var options = {
-        date: new Date(),
-        mode: 'date',
-        minDate: Date.parse(new Date()),
-        maxDate: Date.parse(moment(new Date().getFullYear() + 1, 'YYYY').format('DD-MM-YYYY'))
-      }
-      datePicker.show(options, function (d) {
-        $('#date').val(moment(d, 'd-m-yyyy').format('DD-MM-YYYY'))
-      }, function (e) {
-      })
-    })
+    // set minimum date
+    $('#date').attr('min', moment(new Date().getDate() - 7, 'DD').format('YYYY-MM-DD'))
+    // set maximum time
+    $('#date').attr('max', moment(new Date().getFullYear() + 1, 'YYYY').format('YYYY-MM-DD'))
     // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()
@@ -112,7 +88,7 @@ var editFunction = {
   formSubmit: function (e) {
     e.preventDefault()
     try {
-      //editFunction.validation(e)
+      // editFunction.validation(e)
       obj = {}
       obj.id = $('#storageId').text()
       obj.type = e.target.storageType.value

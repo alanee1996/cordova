@@ -16,4 +16,4 @@ mobileui install loading
 mobileui install jquery
 mobileui install momentjs
 cordova plugin add cordova-sqlite-storage 
-cordova plugin add cordova-plugin-datepicker
+cordova plugin add cordova-plugin-screen-orientation
