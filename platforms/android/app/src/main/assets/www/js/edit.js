@@ -49,7 +49,7 @@ var editFunction = {
       }
     })
     // set minimum date
-    $('#date').attr('min', moment(new Date().getDate() - 7, 'DD').format('YYYY-MM-DD'))
+    $('#date').attr('min', moment(new Date().getTime() - 6.048e+8).format('YYYY-MM-DD'))
     // set maximum time
     $('#date').attr('max', moment(new Date().getFullYear() + 1, 'YYYY').format('YYYY-MM-DD'))
     // btn trigger to open camera
