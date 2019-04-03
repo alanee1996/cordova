@@ -33,17 +33,16 @@ var confrimFunction = {
       //insert storage data to db
       db.createStorage(obj.model, function (condition) {
         if (condition) {
-          closeLoading()
           //remove home page from the cache of mobileui in order to make the page refresh when landed
           if (document.getElementById('home.html')) {
             document.getElementById('home.html').remove()
           }
           route.home({}, homeFunction.init)
         } else {
-          closeLoading()
           alert('The storage item is duplicate in the database')
         }
       })
+      closeLoading()
     })
   }
 }

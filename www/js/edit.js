@@ -48,10 +48,10 @@ var editFunction = {
         $('#custom-other-container').addClass('hide')
       }
     })
-    // set minimum date
-    $('#date').attr('min', moment(new Date().getTime() - 6.048e+8).format('YYYY-MM-DD'))
-    // set maximum time
-    $('#date').attr('max', moment(new Date().getFullYear() + 1, 'YYYY').format('YYYY-MM-DD'))
+    //set minimum date
+    $('#date').attr('min', moment().subtract(7, 'days').format('YYYY-MM-DD'))
+    //set maximum time
+    $('#date').attr('max',moment().add(1, 'years').format('YYYY-MM-DD'))
     // btn trigger to open camera
     $('#openCam').click(function (e) {
       e.preventDefault()
@@ -88,7 +88,6 @@ var editFunction = {
   formSubmit: function (e) {
     e.preventDefault()
     try {
-      // editFunction.validation(e)
       obj = {}
       obj.id = $('#storageId').text()
       obj.type = e.target.storageType.value
@@ -114,9 +113,9 @@ var editFunction = {
           document.getElementById('home.html').remove()
         }
         console.log('Update successful')
-        closeLoading()
         route.home({}, homeFunction.init)
       })
+      closeLoading()
     } catch(e) {
       alert(e.message)
     }
@@ -134,29 +133,17 @@ var editFunction = {
     })
     return features
   },
-  validation: function (e) {
-    // check checkbox at least select one
-    var element = e.target
-    var count = 0
-    $(element).find('input[name="storageFeature[]"]').each(function (key, value) {
-      if ($(value).prop('checked') === true) {
-        count++
-      }
-    })
-    if (count == 0) throw new Error('Please at least choose one storage feature')
-    if ($('#other').prop('checked') && $('#custom-other').val() == '') throw new Error('Please enter other storage features')
-  },
   // make sure the error message in specific
   demensionKeyUp: function (e) {
     var validity = e.target.validity
     if (validity.rangeUnderflow === true) {
-      e.target.setCustomValidity('Minimum demensions is 1.3')
+      e.target.setCustomValidity('Minimum dimensions is 1.3')
     }
     else if (validity.rangeOverflow === true) {
-      e.target.setCustomValidity('Maximum demensions is 20')
+      e.target.setCustomValidity('Maximum dimensions is 20')
     }
     else if (validity.valueMissing === true) {
-      e.target.setCustomValidity('Please enter demensions')
+      e.target.setCustomValidity('Please enter dimensions')
     }else {
       e.target.setCustomValidity('')
     }

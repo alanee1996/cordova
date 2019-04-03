@@ -31,21 +31,21 @@ var homeFunction = {
           value: search.value,
           max: $('#amount').val()
         }
+        //this if statement is to replace the % to !% in order to perform esacaping during quering
+        if (searchValue.value.includes('%')) {
+          searchValue.value = searchValue.value.replace('%', '!%')
+        }
+        loading('Searching')
         db.search(searchValue, function (m) {
-          if (searchValue.value.includes('%')) { 
-            alert('Violated character found from the search box')
-          } else {
-            loading('Searching')
-            closeLoading()
-            $('#storagelist').children('.storage').remove()
-            if (m) {
-              homeFunction.buildStorageList(m)
-            }else {
-              $('#no-result').removeClass('hide')
-            } 
+          $('#storagelist').children('.storage').remove()
+          if (m) {
+            homeFunction.buildStorageList(m)
+          }else {
+            $('#no-result').removeClass('hide')
           }
           search.blur()
         })
+        closeLoading()
         e.preventDefault()
       }
     })
@@ -86,8 +86,8 @@ var homeFunction = {
           storageItem.find('img').attr('src', value.images[0].path).attr('onclick', 'browseImage(' + '"' + value.images[0].path + '"' + ')')
         }
         storageItem.find('.storage-type').text('Storage type: ' + value.type)
-        storageItem.find('.demensions').text('Demensions: ' + value.demensions + 'm²')
-        storageItem.find('.price').text('RM ' + value.price)
+        storageItem.find('.demensions').text('Demensions: ' + value.demensions.toFixed(2) + 'm²')
+        storageItem.find('.price').text('RM ' + value.price.toFixed(2))
         storageItem.find('.reporter').text('Reporter: ' + value.reporter)
         storageItem.find('.note').text(value.note)
         storageItem.find('.edit').attr('onclick', 'homeFunction.edit(' + JSON.stringify(value) + ')')

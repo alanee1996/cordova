@@ -193,7 +193,8 @@ var DBEntity = {
     if (DBEntity.db == null) {
       DBEntity.connect()
     }
-    var sql = "select * from `storage` where (`type` LIKE '%'|| ? ||'%' or `reporter` LIKE '%'|| ? ||'%') and `price` between 100 and ?  order by `id` DESC"
+    //the escape keyword used to escape the special character in order to query the result with %
+    var sql = "select * from `storage` where (`type` LIKE '%'||?||'%' ESCAPE '!' or `reporter` LIKE '%'||?||'%' ESCAPE '!') and `price` between 100 and ?  order by `id` DESC"
     DBEntity.db.transaction(function (tx) {
       var model = []
       tx.executeSql(
@@ -301,42 +302,48 @@ var DBEntity = {
   },
   updateStorage: function (model, callback) {
     if (DBEntity.db === null) { DBEntity.connect() }
-    DBEntity.db.transaction(function (tr) {
-      var sql1 = 'update `storage` set `type` = ? ,`demensions` = ? ,`date` = ? ,`time` = ? ,`price` = ? ,`note` = ? ,`reporter` = ? where `id` = ? '
-      // update storage and storage feature
-      tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) {
-        var sql2 = 'delete from  `storage_feature` where `storage_id` = ?'
-        // delete all the previous storage_feature and insert again will be the better solution to update the storage feature
-        trx.executeSql(sql2, [model.id], function (trx2, rs2) {
-          if (model.features && model.features.length > 0) {
-            for (var i = 0; i < model.features.length; i++) {
-              trx2.executeSql(
-                'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)',
-                [model.features[i].feature, model.id, model.features[i].isCustom],
-                function (tx2, rs2) {
-                  console.log('storage feature update successful')
-                },
-                DBEntity.printDbError
-              )
-            }
-          }
-        }, DBEntity.printDbError)
+    DBEntity.checkUpdateDuplicatie(model, function (condition) {
+      if (condition) {
+        alert('Record duplicated that is not allow')
+      }else {
+        DBEntity.db.transaction(function (tr) {
+          var sql1 = 'update `storage` set `type` = ? ,`demensions` = ? ,`date` = ? ,`time` = ? ,`price` = ? ,`note` = ? ,`reporter` = ? where `id` = ? '
+          // update storage and storage feature
+          tr.executeSql(sql1, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter, model.id], function (trx, rs) {
+            var sql2 = 'delete from  `storage_feature` where `storage_id` = ?'
+            // delete all the previous storage_feature and insert again will be the better solution to update the storage feature
+            trx.executeSql(sql2, [model.id], function (trx2, rs2) {
+              if (model.features && model.features.length > 0) {
+                for (var i = 0; i < model.features.length; i++) {
+                  trx2.executeSql(
+                    'insert into `storage_feature` (`feature` , `storage_id`, `isCustom`)  values(?,?,?)',
+                    [model.features[i].feature, model.id, model.features[i].isCustom],
+                    function (tx2, rs2) {
+                      console.log('storage feature update successful')
+                    },
+                    DBEntity.printDbError
+                  )
+                }
+              }
+            }, DBEntity.printDbError)
 
-        // update image
-        if (model.images && model.images.length > 0) {
-          for (var i = 0; i < model.images.length; i++) {
-            trx.executeSql(
-              'insert into `storage_image` (`path`, `storage_id`) values(?,?)',
-              [model.images[i], model.id],
-              function (tx2, rs2) {
-                console.log('Storage image update successful')
-              },
-              DBEntity.printDbError
-            )
-          }
-        }
-      }, DBEntity.printDbError)
-      callback()
+            // update image
+            if (model.images && model.images.length > 0) {
+              for (var i = 0; i < model.images.length; i++) {
+                trx.executeSql(
+                  'insert into `storage_image` (`path`, `storage_id`) values(?,?)',
+                  [model.images[i], model.id],
+                  function (tx2, rs2) {
+                    console.log('Storage image update successful')
+                  },
+                  DBEntity.printDbError
+                )
+              }
+            }
+          }, DBEntity.printDbError)
+          callback()
+        })
+      }
     })
   },
   deleteStorage: function (model, callback) {
@@ -416,6 +423,20 @@ var DBEntity = {
     DBEntity.db.transaction(function (tr) {
       var sql = 'select count(*) as rows from `storage` where `type` = ? and `demensions` = ? and `date` = ? and `time` = ? and `price` = ? and `note` = ? and `reporter` = ?'
       tr.executeSql(sql, [model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter], function (trx, rs) {
+        if (rs.rows.length > 0 && rs.rows.item(0).rows) {
+          callback(true)
+        }else {
+          callback(false)
+        }
+      }, DBEntity.printDbError)
+    })
+  },
+  // checking duplicate storage item during update event
+  checkUpdateDuplicatie: function (model, callback) {
+    if (DBEntity.db === null) { DBEntity.connect() }
+    DBEntity.db.transaction(function (tr) {
+      var sql = 'select count(*) as rows from `storage` where `id` != ? and `type` = ? and `demensions` = ? and `date` = ? and `time` = ? and `price` = ? and `note` = ? and `reporter` = ?'
+      tr.executeSql(sql, [model.id, model.type, model.demensions, model.date, model.time, model.price, model.note, model.reporter], function (trx, rs) {
         if (rs.rows.length > 0 && rs.rows.item(0).rows) {
           callback(true)
         }else {
