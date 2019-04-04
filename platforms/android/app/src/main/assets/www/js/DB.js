@@ -193,6 +193,7 @@ var DBEntity = {
     if (DBEntity.db == null) {
       DBEntity.connect()
     }
+    //the escape keyword used to escape the special character in order to query the result with %
     var sql = "select * from `storage` where (`type` LIKE '%'||?||'%' ESCAPE '!' or `reporter` LIKE '%'||?||'%' ESCAPE '!') and `price` between 100 and ?  order by `id` DESC"
     DBEntity.db.transaction(function (tx) {
       var model = []

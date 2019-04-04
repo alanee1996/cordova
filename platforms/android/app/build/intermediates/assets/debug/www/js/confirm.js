@@ -6,7 +6,7 @@ var confrimFunction = {
     //data binding
     var container = $('#confirm_storage_item')
     $(container).find('.storageType').text('Storage Type: ' + obj.model.type)
-    $(container).find('.demensions').text('Demensions: ' + obj.model.demensions)
+    $(container).find('.demensions').text('Dimensions: ' + obj.model.demensions)
     $(container).find('.price').text('Price ' + obj.model.price)
     $(container).find('.reporter').text('Reporter: ' + obj.model.reporter)
     $(container).find('.date').text('Date: ' + obj.model.date)
