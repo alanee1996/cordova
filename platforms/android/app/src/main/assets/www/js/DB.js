@@ -267,7 +267,7 @@ var DBEntity = {
     if (DBEntity.db == null) { DBEntity.connect }
     // delete image from database
     DBEntity.db.transaction(function (tx) {
-      var sql = 'delete from `storage_image` where `id` = ?'
+      var sql = 'delete from `storage_image` where `storage_id` = ?'
       tx.executeSql(sql, [id], function (trx, rs) {
         callback(rs)
       }, DBEntity.printDbError)
